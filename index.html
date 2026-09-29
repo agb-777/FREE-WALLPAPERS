@@ -45,18 +45,8 @@
     .fade { opacity: 0; transition: opacity .5s var(--ease); }
     .fade.is-loaded { opacity: 1; }
 
-    /* GRID ONLY */
-    .grid-wrap {
-      padding: var(--space-4) var(--page-px);
-      max-width: 1600px;
-      margin: 0 auto;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: var(--grid-gap);
-    }
+    .grid-wrap { padding: var(--space-4) var(--page-px); max-width: 1600px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: var(--grid-gap); }
     @media (min-width: 560px) { .grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
     @media (min-width: 1200px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
@@ -81,11 +71,10 @@
     .card-overlay {
       position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 14px 14px;
       background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.85) 100%);
-      display: flex; align-items: flex-end; justify-content: space-between;
+      display: flex; align-items: flex-end; justify-content: flex-end;
       opacity: 0; transition: opacity 0.35s var(--ease); pointer-events: none;
     }
     .card:hover .card-overlay, .card:focus-visible .card-overlay { opacity: 1; }
-    .card-label { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.85); font-weight: 500; }
     .card-cta {
       display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
       background: rgba(255,255,255,0.95); color: #0a0a0b; font-size: 12px; font-weight: 600;
@@ -94,7 +83,6 @@
     .card-cta svg { width: 12px; height: 12px; }
     .card:hover .card-cta, .card:focus-visible .card-cta { transform: translateY(0); opacity: 1; }
 
-    /* ERROR STATE */
     .state { padding: var(--space-9) var(--space-4); display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-4); grid-column: 1 / -1; }
     .state-icon { width: 56px; height: 56px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; color: var(--text-muted); }
     .state-icon svg { width: 24px; height: 24px; }
@@ -103,7 +91,6 @@
     .state-btn { margin-top: var(--space-2); padding: 10px 18px; border-radius: var(--radius); border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font-size: 13px; font-weight: 500; }
     .state-btn:hover { background: #202024; border-color: #3a3a42; }
 
-    /* LIGHTBOX */
     .lightbox {
       position: fixed; inset: 0; z-index: 100; background: rgba(6, 6, 7, 0.85);
       backdrop-filter: blur(22px) saturate(120%); -webkit-backdrop-filter: blur(22px) saturate(120%);
@@ -253,7 +240,7 @@
       skeleton.innerHTML = '<div class="skeleton-icon" aria-hidden="true"></div>';
       const overlay = document.createElement("div");
       overlay.className = "card-overlay";
-      overlay.innerHTML = `<span class="card-label">Wallpaper ${String(number).padStart(2, '0')}</span><span class="card-cta">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>`;
+      overlay.innerHTML = `<span class="card-cta">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>`;
       wrap.append(img, skeleton, overlay);
       link.append(wrap);
       return link;
