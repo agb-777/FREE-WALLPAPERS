@@ -10,8 +10,248 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%96%BC%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,800&display=swap">
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --panel: #141416;
+      --panel-hi: #1d1d21;
+      --line: #26262b;
+      --line-hi: #3a3a42;
+      --text: #f5f5f7;
+      --muted: #8a8a93;
+      --accent: #ffffff;
+      --on-accent: #0b0b0d;
+      --radius: 16px;
+      --pad: clamp(16px, 3vw, 40px);
+      --gap: clamp(16px, 2vw, 28px);
+    }
+
+    * { box-sizing: border-box; margin: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font: 400 15px/1.5 "Bricolage Grotesque", system-ui, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    a, button {
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button { border: 0; background: none; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .is-locked { overflow: hidden; }
+    .fade { opacity: 0; transition: opacity .5s; }
+    .fade.is-loaded { opacity: 1; }
+
+    .wrap { max-width: 1600px; margin: 0 auto; padding: 0 var(--pad); }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(11, 11, 13, .82);
+      backdrop-filter: blur(16px) saturate(140%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .site-header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      height: 64px;
+    }
+
+    .site-title {
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .count { font-size: 13px; color: var(--muted); text-align: right; }
+
+    main { padding-top: clamp(24px, 4vw, 48px); padding-bottom: 104px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+      gap: var(--gap);
+    }
+
+    .card {
+      position: relative;
+      display: block;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(110deg, var(--panel) 30%, var(--panel-hi) 50%, var(--panel) 70%) 0 0 / 200% 100%;
+      animation: shimmer 1.6s linear infinite;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+
+    .card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity .5s, transform .6s;
+    }
+
+    .card::after {
+      content: "Lihat";
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      background: rgba(11, 11, 13, .72);
+      backdrop-filter: blur(8px);
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      translate: 0 6px;
+      transition: opacity .2s, translate .2s;
+    }
+
+    .card:hover, .card:focus-visible {
+      border-color: var(--line-hi);
+      transform: translateY(-3px);
+      box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .9);
+    }
+
+    .card:hover img { transform: scale(1.05); }
+    .card:hover::after, .card:focus-visible::after { opacity: 1; translate: 0 0; }
+
+    @media (hover: none) { .card::after { display: none; } }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    .notice, .empty { padding: 72px 0; text-align: center; color: var(--muted); }
+    .empty { grid-column: 1 / -1; }
+
+    .pager { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 48px; }
+
+    .pager__item {
+      display: grid;
+      place-items: center;
+      min-width: 42px;
+      height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--muted);
+      transition: color .15s, border-color .15s;
+    }
+
+    a.pager__item:hover { color: var(--text); border-color: var(--line-hi); }
+
+    .pager__item[aria-current="page"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--on-accent);
+      font-weight: 800;
+    }
+
+    .pager__item[aria-disabled="true"] { opacity: .35; }
+    .pager__gap { display: grid; place-items: center; width: 24px; color: var(--muted); }
+
+    .site-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 4;
+      padding: 12px 16px max(12px, env(safe-area-inset-bottom));
+      background: rgba(11, 11, 13, .82);
+      backdrop-filter: blur(16px) saturate(140%);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      padding: var(--pad) var(--pad) max(var(--pad), env(safe-area-inset-bottom));
+      background: rgba(5, 5, 7, .95);
+      backdrop-filter: blur(20px);
+      touch-action: pan-y;
+    }
+
+    .lightbox[hidden] { display: none; }
+
+    .viewer {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: min(100%, calc((100vh - var(--pad) * 2 - 90px) * 16 / 9));
+      width: min(100%, calc((100dvh - var(--pad) * 2 - 90px) * 16 / 9));
+    }
+
+    .viewer__frame {
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 40px 100px -20px rgba(0, 0, 0, .9);
+    }
+
+    .viewer__frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    .viewer__controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 16px;
+    }
+
+    .viewer__nav, .viewer__actions { display: flex; align-items: center; gap: 12px; }
+    .viewer__pos { min-width: 64px; color: var(--muted); font-size: 14px; text-align: center; }
+
+    .btn, .icon-btn {
+      display: inline-grid;
+      place-items: center;
+      height: 44px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      transition: background .15s, border-color .15s;
+    }
+
+    .btn { padding: 0 22px; border-radius: 99px; white-space: nowrap; }
+    .icon-btn { width: 44px; border-radius: 50%; font-size: 22px; line-height: 1; }
+    .btn:hover, .icon-btn:hover { background: var(--panel-hi); border-color: var(--line-hi); }
+
+    .btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 800; }
+    .btn--primary:hover { background: #e4e4e8; border-color: #e4e4e8; }
+
+    @media (max-width: 560px) {
+      .site-header__inner { height: 56px; }
+      .viewer__controls { flex-direction: column-reverse; align-items: stretch; }
+      .viewer__nav { justify-content: space-between; }
+      .viewer__actions .btn { flex: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -29,18 +269,279 @@
   <footer class="site-footer">Copyright © <span id="year"></span> agb-777</footer>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Detail wallpaper" hidden>
-    <div class="lightbox__bar">
-      <a class="btn btn--primary" id="download" target="_blank" rel="noopener">Download</a>
-      <button class="btn" id="close" type="button">Tutup</button>
-    </div>
-    <div class="lightbox__stage" id="stage">
-      <button class="lightbox__nav lightbox__nav--prev" id="prev" type="button" aria-label="Sebelumnya">‹</button>
-      <div class="lightbox__frame"><img class="fade" id="image" alt="Wallpaper"></div>
-      <button class="lightbox__nav lightbox__nav--next" id="next" type="button" aria-label="Berikutnya">›</button>
+    <div class="viewer">
+      <div class="viewer__frame"><img class="fade" id="image" alt="Wallpaper"></div>
+      <div class="viewer__controls">
+        <div class="viewer__nav">
+          <button class="icon-btn" id="prev" type="button" aria-label="Sebelumnya">‹</button>
+          <span class="viewer__pos" id="position"></span>
+          <button class="icon-btn" id="next" type="button" aria-label="Berikutnya">›</button>
+        </div>
+        <div class="viewer__actions">
+          <a class="btn btn--primary" id="download" target="_blank" rel="noopener">Download</a>
+          <button class="btn" id="close" type="button">Tutup</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <noscript><p class="notice">Aktifkan JavaScript untuk melihat wallpaper.</p></noscript>
-  <script src="app.js" defer></script>
+
+  <script>
+    "use strict";
+
+    const CONFIG = {
+      dataFile: "wallpapers.json",
+      perPage: 12,
+      swipeDistance: 50,
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const el = {
+      grid: $("grid"),
+      count: $("count"),
+      pager: $("pager"),
+      year: $("year"),
+      lightbox: $("lightbox"),
+      image: $("image"),
+      position: $("position"),
+      download: $("download"),
+      close: $("close"),
+      prev: $("prev"),
+      next: $("next"),
+    };
+
+    const state = { wallpapers: [], page: 1, id: "" };
+    let shownPage = 0;
+    let shownId = "";
+    let lastFocus = null;
+
+    function readHash() {
+      const params = new URLSearchParams(location.hash.replace(/^#\/?\??/, ""));
+      state.page = Math.max(1, parseInt(params.get("page"), 10) || 1);
+      state.id = params.get("w") || "";
+    }
+
+    function buildHash({ page, id }) {
+      const params = new URLSearchParams();
+      if (page > 1) params.set("page", page);
+      if (id) params.set("w", id);
+      const query = params.toString();
+      return "#/" + (query ? "?" + query : "");
+    }
+
+    function goTo(patch) {
+      Object.assign(state, patch);
+      history.replaceState(null, "", buildHash(state));
+      render();
+    }
+
+    const toId = (url) => String(url)
+      .replace(/^https?:\/\/[^/]+\//, "")
+      .replace(/\.[a-z0-9]+$/i, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+    function normalize(list) {
+      const seen = new Set();
+      return list.filter((w) => w && (w.thumb || w.preview || w.original)).map((w, i) => {
+        const original = w.original || w.preview || w.thumb;
+        const preview = w.preview || w.thumb || original;
+        const thumb = w.thumb || preview;
+        let id = toId(original) || "w" + (i + 1);
+        while (seen.has(id)) id += "-" + (i + 1);
+        seen.add(id);
+        return { id, thumb, preview, original };
+      });
+    }
+
+    async function loadData() {
+      const res = await fetch(CONFIG.dataFile, { cache: "no-cache" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const list = await res.json();
+      if (!Array.isArray(list)) throw new Error("Isi JSON harus berupa array");
+      return normalize(list);
+    }
+
+    const pageCount = () => Math.max(1, Math.ceil(state.wallpapers.length / CONFIG.perPage));
+
+    function showMessage(text) {
+      const p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = text;
+      el.grid.replaceChildren(p);
+    }
+
+    function createCard(wallpaper, number) {
+      const link = document.createElement("a");
+      link.className = "card";
+      link.href = buildHash({ page: state.page, id: wallpaper.id });
+      link.setAttribute("aria-label", "Buka wallpaper " + number);
+
+      const img = new Image();
+      img.className = "fade";
+      img.alt = "Wallpaper " + number;
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.addEventListener("load", () => img.classList.add("is-loaded"));
+      img.src = wallpaper.thumb;
+
+      link.append(img);
+      return link;
+    }
+
+    function renderGrid() {
+      const start = (state.page - 1) * CONFIG.perPage;
+      const items = state.wallpapers.slice(start, start + CONFIG.perPage);
+      const total = pageCount();
+      const suffix = total > 1 ? ` • halaman ${state.page} dari ${total}` : "";
+      el.count.textContent = state.wallpapers.length + " wallpaper" + suffix;
+      if (!items.length) return showMessage("Belum ada wallpaper.");
+      el.grid.replaceChildren(...items.map((w, i) => createCard(w, start + i + 1)));
+    }
+
+    function pagerItem(text, page, { current = false, disabled = false, label = "" } = {}) {
+      const node = document.createElement(disabled ? "span" : "a");
+      node.className = "pager__item";
+      node.textContent = text;
+      if (label) node.setAttribute("aria-label", label);
+      if (disabled) node.setAttribute("aria-disabled", "true");
+      else node.href = buildHash({ page, id: "" });
+      if (current) node.setAttribute("aria-current", "page");
+      return node;
+    }
+
+    function renderPager() {
+      const total = pageCount();
+      if (total < 2) return el.pager.replaceChildren();
+
+      const numbers = [...new Set([1, total, state.page - 1, state.page, state.page + 1])]
+        .filter((n) => n >= 1 && n <= total)
+        .sort((a, b) => a - b);
+
+      const nodes = [pagerItem("‹", state.page - 1, { disabled: state.page === 1, label: "Sebelumnya" })];
+      let last = 0;
+      for (const n of numbers) {
+        if (n - last > 1) {
+          const gap = document.createElement("span");
+          gap.className = "pager__gap";
+          gap.textContent = "…";
+          nodes.push(gap);
+        }
+        nodes.push(pagerItem(n, n, { current: n === state.page }));
+        last = n;
+      }
+      nodes.push(pagerItem("›", state.page + 1, { disabled: state.page === total, label: "Berikutnya" }));
+      el.pager.replaceChildren(...nodes);
+    }
+
+    function setBackgroundInert(value) {
+      for (const tag of ["header", "main", "footer"]) document.querySelector(tag).inert = value;
+    }
+
+    function showLightbox(index) {
+      const { wallpapers } = state;
+      const wallpaper = wallpapers[index];
+
+      if (el.lightbox.hidden) {
+        lastFocus = document.activeElement;
+        setBackgroundInert(true);
+        el.lightbox.hidden = false;
+        document.documentElement.classList.add("is-locked");
+        el.close.focus();
+      }
+
+      if (shownId === wallpaper.id) return;
+      shownId = wallpaper.id;
+      el.image.classList.remove("is-loaded");
+      el.image.onload = () => el.image.classList.add("is-loaded");
+      el.image.src = wallpaper.preview;
+      el.download.href = wallpaper.original;
+      el.position.textContent = `${index + 1} / ${wallpapers.length}`;
+      for (const d of [-1, 1]) {
+        new Image().src = wallpapers[(index + d + wallpapers.length) % wallpapers.length].preview;
+      }
+    }
+
+    function hideLightbox() {
+      if (el.lightbox.hidden) return;
+      shownId = "";
+      el.lightbox.hidden = true;
+      document.documentElement.classList.remove("is-locked");
+      setBackgroundInert(false);
+      if (lastFocus) lastFocus.focus({ preventScroll: true });
+    }
+
+    function step(direction) {
+      const { wallpapers, id } = state;
+      if (wallpapers.length < 2) return;
+      const index = wallpapers.findIndex((w) => w.id === id);
+      goTo({ id: wallpapers[(index + direction + wallpapers.length) % wallpapers.length].id });
+    }
+
+    function render() {
+      const index = state.wallpapers.findIndex((w) => w.id === state.id);
+      if (index >= 0) state.page = Math.floor(index / CONFIG.perPage) + 1;
+      state.page = Math.min(state.page, pageCount());
+
+      if (state.page !== shownPage) {
+        const isFirstRender = shownPage === 0;
+        shownPage = state.page;
+        renderGrid();
+        renderPager();
+        if (!isFirstRender) window.scrollTo(0, 0);
+      }
+
+      if (index >= 0) showLightbox(index);
+      else hideLightbox();
+    }
+
+    el.close.addEventListener("click", () => goTo({ id: "" }));
+    el.prev.addEventListener("click", () => step(-1));
+    el.next.addEventListener("click", () => step(1));
+    el.lightbox.addEventListener("click", (e) => {
+      if (e.target === el.lightbox) goTo({ id: "" });
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (el.lightbox.hidden) return;
+      if (e.key === "Escape") goTo({ id: "" });
+      else if (e.key === "ArrowLeft") step(-1);
+      else if (e.key === "ArrowRight") step(1);
+    });
+
+    let touchStartX = null;
+    el.lightbox.addEventListener("touchstart", (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    el.lightbox.addEventListener("touchend", (e) => {
+      if (touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      touchStartX = null;
+      if (Math.abs(dx) > CONFIG.swipeDistance) step(dx < 0 ? 1 : -1);
+    });
+
+    async function init() {
+      el.year.textContent = new Date().getFullYear();
+      el.count.textContent = "Memuat...";
+      try {
+        state.wallpapers = await loadData();
+      } catch (err) {
+        console.error(err);
+        el.count.textContent = "";
+        showMessage("Gagal memuat wallpapers.json. Cek nama file dan format JSON-nya. Kalau dibuka langsung dari folder, jalankan lewat server lokal atau GitHub Pages.");
+        return;
+      }
+      readHash();
+      render();
+      window.addEventListener("hashchange", () => {
+        readHash();
+        render();
+      });
+    }
+
+    init();
+  </script>
 </body>
 </html>
