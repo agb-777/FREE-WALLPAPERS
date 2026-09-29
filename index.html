@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FREE-WALLPAPERS — Wallpaper Desktop</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#15121c;--panel:#1e1a29;--line:#322b45;--tx:#f1eef7;--mut:#9a93ad;--ac:#b9a6ff;--r:14px}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font:400 15px/1.55 "Bricolage Grotesque",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+button,a{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button{border:0;background:none}
+a{text-decoration:none}
+:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.wrap{max-width:1600px;margin:auto;padding:0 clamp(16px,3vw,40px)}
+.bar{position:sticky;top:0;z-index:5;background:rgba(21,18,28,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.head{display:flex;align-items:center;gap:clamp(12px,3vw,32px);padding:14px 0 4px}
+h1{font-weight:800;font-size:clamp(17px,3.2vw,28px);line-height:1;letter-spacing:-.02em;white-space:nowrap}
+#q{flex:1;max-width:440px;min-width:0;background:var(--panel);border:1px solid var(--line);color:var(--tx);padding:10px 18px;border-radius:99px;font:inherit;font-size:16px}
+#q::placeholder{color:var(--mut)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:7px 16px;border-radius:99px;background:var(--panel);color:var(--mut);white-space:nowrap;transition:.15s}
+.chip:hover{color:var(--tx)}
+.chip[aria-current=true]{background:var(--ac);color:#15121c;font-weight:500}
+main{padding:24px 0 96px}
+footer{position:fixed;left:0;right:0;bottom:0;z-index:4;padding:10px 16px max(10px,env(safe-area-inset-bottom));text-align:center;font-size:13px;color:var(--mut);background:rgba(21,18,28,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.count{color:var(--mut);margin-bottom:18px}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:22px 18px}
+.card{display:block}
+.thumb{position:relative;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;background:var(--panel);box-shadow:0 10px 30px -14px rgba(0,0,0,.7)}
+.thumb .ph,.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thumb img{opacity:0;transition:opacity .4s,transform .5s}
+.thumb img.on{opacity:1}
+.card:hover .thumb img{transform:scale(1.05)}
+.badge{position:absolute;right:10px;bottom:10px;padding:2px 10px;border-radius:99px;background:rgba(15,12,22,.7);backdrop-filter:blur(6px);font-size:12px;opacity:0;transition:.2s}
+.card:hover .badge,.card:focus-visible .badge{opacity:1}
+@media(hover:none){.badge{opacity:1}}
+.meta{display:flex;justify-content:space-between;gap:8px;padding:10px 4px 0}
+.meta b{font-weight:500}
+.meta span{color:var(--mut)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:70px 0}
+.pager{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:40px}
+.pg{min-width:40px;height:40px;padding:0 12px;display:grid;place-items:center;border-radius:99px;background:var(--panel);color:var(--mut)}
+a.pg:hover{color:var(--tx)}
+.pg[aria-current=page]{background:var(--ac);color:#15121c;font-weight:800}
+.pg[aria-disabled=true]{opacity:.35}
+.gap{display:grid;place-items:center;width:24px;color:var(--mut)}
+#lb{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;background:#0d0b12;transition:background .4s}
+#lb.open{display:flex}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px clamp(14px,3vw,28px)}
+.top h2{font-size:clamp(17px,2.4vw,20px);font-weight:800}
+.top span{color:var(--mut);font-size:14px}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:10px 18px;border-radius:99px;background:rgba(255,255,255,.08);transition:.15s;white-space:nowrap}
+.btn:hover{background:rgba(255,255,255,.16)}
+.btn[aria-pressed=true]{background:rgba(255,255,255,.2)}
+.btn.pri{background:var(--ac);color:#15121c;font-weight:800}
+.btn.pri:hover{filter:brightness(1.08)}
+.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 clamp(12px,5vw,72px) max(20px,env(safe-area-inset-bottom));position:relative;touch-action:pan-y}
+.frame{position:relative;width:min(100%,calc((100dvh - 150px) * 16 / 9));aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;background:var(--panel);box-shadow:0 30px 80px -20px rgba(0,0,0,.8)}
+.frame img,.frame .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mock{position:absolute;inset:0;display:none;pointer-events:none}
+.mock.on{display:block}
+.icons{position:absolute;left:2.5%;top:4%;display:grid;gap:14px}
+.icons i{display:block;width:clamp(18px,3vw,34px);height:clamp(18px,3vw,34px);border-radius:9px;background:rgba(255,255,255,.75)}
+.icons i:nth-child(2){opacity:.65}.icons i:nth-child(3){opacity:.45}
+.task{position:absolute;left:0;right:0;bottom:0;height:5.5%;min-height:14px;background:rgba(20,18,30,.7);backdrop-filter:blur(8px);display:flex;justify-content:center;align-items:center;gap:10px}
+.task i{width:clamp(8px,1.2vw,16px);height:clamp(8px,1.2vw,16px);border-radius:5px;background:rgba(255,255,255,.7)}
+.nav{position:absolute;top:50%;translate:0 -50%;font-size:26px;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.08)}
+.nav:hover{background:rgba(255,255,255,.18)}
+.nav.l{left:14px}.nav.r{right:14px}
+@media(max-width:900px){.nav{width:38px;height:38px;font-size:22px;background:rgba(13,11,18,.55);z-index:2}.nav.l{left:16px}.nav.r{right:16px}}
+@media(max-width:560px){.btn{padding:9px 14px;font-size:14px}.acts{width:100%}.acts .pri{flex:1;text-align:center}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <div class="head">
+    <h1><a href="#/">FREE-WALLPAPERS</a></h1>
+    <input id="q" type="search" placeholder="Cari wallpaper..." aria-label="Cari wallpaper">
+  </div>
+  <nav class="chips" id="chips" aria-label="Kategori"></nav>
+</div></header>
+
+<main><div class="wrap">
+  <p class="count" id="count"></p>
+  <div id="grid"></div>
+  <nav class="pager" id="pager" aria-label="Halaman"></nav>
+</div></main>
+
+<footer>Copyright © <span id="yr">2026</span> agb-777</footer>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="Detail wallpaper">
+  <div class="top">
+    <div><h2 id="lbt"></h2><span id="lbm"></span></div>
+    <div class="acts">
+      <button class="btn" id="mk" aria-pressed="false">Preview di desktop</button>
+      <a class="btn pri" id="dl" target="_blank" rel="noopener">Download</a>
+      <button class="btn" id="cl">Tutup</button>
+    </div>
+  </div>
+  <div class="stage" id="stage">
+    <button class="nav l" id="pv" aria-label="Sebelumnya">‹</button>
+    <div class="frame">
+      <div class="ph" id="lph"></div>
+      <img id="lim" alt="">
+      <div class="mock" id="mock"><div class="icons"><i></i><i></i><i></i></div><div class="task"><i></i><i></i><i></i><i></i></div></div>
+    </div>
+    <button class="nav r" id="nx" aria-label="Berikutnya">›</button>
+  </div>
+</div>
+
+<script>
+/* ============ SETTING & DATA ============ */
+const PER_PAGE = 12;   // jumlah wallpaper per halaman
+const SITE = "FREE-WALLPAPERS";
+/* thumb    : ~600px WebP (30-80 KB)    -> grid
+   preview  : ~1920px WebP (200-400 KB) -> lightbox
+   original : file asli 3-5 MB          -> cuma dibuka pas klik Download
+   colors   : 2 warna dominan (placeholder + warna latar lightbox)
+   id       : opsional, dipakai di URL. Kalau kosong dibuat otomatis dari title. */
+let WALLPAPERS = [];  // diisi dari wallpapers.json
+/* ========================================= */
+
+const $=id=>document.getElementById(id);
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const grad=w=>`linear-gradient(135deg,${w.colors[0]},${w.colors[1]})`;
+let cats=["Semua"];
+
+/* ---- state di URL: #/?cat=Nature&q=abc&page=2&w=neon-forest ---- */
+let S={cat:"Semua",q:"",page:1,w:""},L=[],LB=[],lbOpen=false,gridKey=null,first=true;
+function readURL(){
+  const p=new URLSearchParams(location.hash.replace(/^#\/?\??/,""));
+  S={cat:p.get("cat")||"Semua",q:p.get("q")||"",page:Math.max(1,parseInt(p.get("page"))||1),w:p.get("w")||""};
+}
+function build(patch){
+  const n={...S,...patch},p=new URLSearchParams();
+  if(n.cat!=="Semua")p.set("cat",n.cat);
+  if(n.q)p.set("q",n.q);
+  if(n.page>1)p.set("page",n.page);
+  if(n.w)p.set("w",n.w);
+  return "#/"+(p.toString()?"?"+p:"");
+}
+function go(patch,replace){
+  const h=build(patch);S={...S,...patch};
+  if(replace){history.replaceState(null,"",h);apply()}
+  else if(location.hash!==h)location.hash=h;
+}
+window.addEventListener("hashchange",()=>{readURL();apply()});
+
+/* ---- render ---- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;
+  const im=e.target;im.onload=()=>im.classList.add("on");im.src=im.dataset.src;io.unobserve(im)}),{rootMargin:"300px"});
+
+function apply(){
+  const q=S.q.trim().toLowerCase();
+  L=WALLPAPERS.filter(w=>(S.cat==="Semua"||w.category===S.cat)&&(!q||(w.title+" "+w.category).toLowerCase().includes(q)));
+  const pages=Math.max(1,Math.ceil(L.length/PER_PAGE));
+  const page=Math.min(S.page,pages);
+  if($("q").value!==S.q)$("q").value=S.q;
+
+  $("chips").innerHTML=cats.map(c=>`<a class="chip" ${c===S.cat?'aria-current="true"':""} href="${build({cat:c,page:1,w:""})}">${c}</a>`).join("");
+
+  const key=[S.cat,S.q,page].join("|");
+  if(key!==gridKey){
+    gridKey=key;
+    const items=L.slice((page-1)*PER_PAGE,page*PER_PAGE);
+    $("count").textContent=L.length+" wallpaper"+(pages>1?` • halaman ${page} dari ${pages}`:"");
+    $("grid").innerHTML=items.length?items.map(w=>`
+      <a class="card" href="${build({page,w:w.id})}" aria-label="Buka ${w.title}">
+        <div class="thumb"><div class="ph" style="background:${grad(w)}"></div>
+          ${w.thumb?`<img data-src="${w.thumb}" alt="${w.title}" decoding="async">`:""}
+          <span class="badge">${w.resolution}</span></div>
+        <div class="meta"><b>${w.title}</b><span>${w.category}</span></div>
+      </a>`).join(""):`<p class="empty">Nggak ada wallpaper yang cocok. Coba kata kunci atau kategori lain.</p>`;
+    document.querySelectorAll("#grid img").forEach(im=>io.observe(im));
+    $("pager").innerHTML=pager(page,pages);
+    if(!first)window.scrollTo(0,0);
+  }
+  first=false;
+
+  const w=WALLPAPERS.find(x=>x.id===S.w);
+  if(w){LB=L.includes(w)?L:[w];showLB(w)}else closeLB();
+  document.title=w?`${w.title} — ${SITE}`:(S.cat!=="Semua"?`${S.cat} — ${SITE}`:`${SITE} — Wallpaper Desktop`);
+}
+function pager(page,pages){
+  if(pages<2)return "";
+  const set=new Set([1,pages,page-1,page,page+1]);
+  const nums=[...set].filter(n=>n>=1&&n<=pages).sort((a,b)=>a-b);
+  let out=[],last=0;
+  out.push(page>1?`<a class="pg" href="${build({page:page-1,w:""})}" aria-label="Sebelumnya">‹</a>`:`<span class="pg" aria-disabled="true">‹</span>`);
+  nums.forEach(n=>{if(n-last>1)out.push('<span class="gap">…</span>');
+    out.push(`<a class="pg" ${n===page?'aria-current="page"':""} href="${build({page:n,w:""})}">${n}</a>`);last=n});
+  out.push(page<pages?`<a class="pg" href="${build({page:page+1,w:""})}" aria-label="Berikutnya">›</a>`:`<span class="pg" aria-disabled="true">›</span>`);
+  return out.join("");
+}
+
+/* ---- lightbox ---- */
+function showLB(w){
+  if(!lbOpen){lbOpen=true;$("lb").classList.add("open");document.body.style.overflow="hidden";$("cl").focus()}
+  $("lbt").textContent=w.title;
+  $("lbm").textContent=`${w.category} • ${w.resolution} • ${w.size}`;
+  $("lb").style.background=`radial-gradient(1000px 600px at 50% 40%,${w.colors[0]}cc,#0d0b12 75%)`;
+  $("lph").style.background=grad(w);
+  const im=$("lim");im.style.opacity=0;im.alt=w.title;
+  if(w.preview){im.onload=()=>im.style.opacity=1;im.src=w.preview}else im.removeAttribute("src");
+  $("dl").href=w.original;$("dl").textContent="Download "+w.size;
+  // preload tetangga
+  [-1,1].forEach(d=>{const n=LB[(LB.indexOf(w)+d+LB.length)%LB.length];if(n&&n.preview)new Image().src=n.preview});
+}
+function closeLB(){
+  if(!lbOpen)return;lbOpen=false;
+  $("lb").classList.remove("open");document.body.style.overflow="";
+}
+function step(d){
+  if(LB.length<2)return;
+  const i=LB.findIndex(x=>x.id===S.w),n=LB[(i+d+LB.length)%LB.length];
+  const idx=L.indexOf(n);
+  go({w:n.id,page:idx<0?S.page:Math.floor(idx/PER_PAGE)+1},true);
+}
+$("cl").onclick=()=>go({w:""},true);
+$("pv").onclick=()=>step(-1);$("nx").onclick=()=>step(1);
+$("mk").onclick=()=>{const on=$("mock").classList.toggle("on");$("mk").setAttribute("aria-pressed",on)};
+$("stage").onclick=e=>{if(e.target===$("stage"))go({w:""},true)};
+document.addEventListener("keydown",e=>{
+  if(!lbOpen)return;
+  if(e.key==="Escape")go({w:""},true);
+  if(e.key==="ArrowLeft")step(-1);
+  if(e.key==="ArrowRight")step(1)});
+// swipe di HP/tablet
+let tx=null;
+$("stage").addEventListener("touchstart",e=>{tx=e.touches[0].clientX},{passive:true});
+$("stage").addEventListener("touchend",e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;tx=null;if(Math.abs(dx)>50)step(dx<0?1:-1)});
+
+// search: replace biar history nggak penuh
+let t;$("q").addEventListener("input",()=>{clearTimeout(t);t=setTimeout(()=>go({q:$("q").value.trim(),page:1,w:""},true),200)});
+
+async function init(){
+  $("count").textContent="Memuat...";
+  try{
+    const r=await fetch("wallpapers.json",{cache:"no-cache"});
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    WALLPAPERS=await r.json();
+    WALLPAPERS.forEach(w=>{w.id=w.id||slug(w.title);w.colors=w.colors||["#2a2540","#4a4470"]});
+    cats=["Semua",...new Set(WALLPAPERS.map(w=>w.category))];
+  }catch(e){
+    $("count").textContent="";
+    $("grid").innerHTML='<p class="empty">Gagal memuat wallpapers.json. Cek nama file dan format JSON-nya. Kalau dibuka langsung dari folder, jalankan lewat server lokal atau GitHub Pages.</p>';
+    return;
+  }
+  readURL();apply();
+}
+init();
+$("yr").textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
