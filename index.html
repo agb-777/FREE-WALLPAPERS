@@ -16,7 +16,7 @@
     :root {
       --bg: #0a0a0b; --surface: #111113; --surface-2: #1a1a1d;
       --border: #232327; --border-strong: #2f2f35;
-      --text: #f4f4f6; --text-muted: #8a8a92;
+      --text: #f4f4f6; --text-muted: #8a8a92; --text-dim: #5a5a62;
       --accent: #ffffff; --accent-hover: #e7e7ea;
       --radius-sm: 6px; --radius: 10px; --radius-lg: 14px;
       --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
@@ -73,9 +73,23 @@
     .count-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #7bd389; box-shadow: 0 0 0 3px rgba(123, 211, 137, 0.15); }
     .count-chip strong { color: var(--text); font-weight: 600; }
 
-    /* GRID */
-    .grid-wrap { padding: var(--space-4) var(--page-px); max-width: 1600px; margin: 0 auto; }
-    .grid { display: grid; grid-template-columns: 1fr; gap: var(--grid-gap); }
+    /* MAIN LAYOUT - flex column supaya pager selalu di bottom */
+    .main-wrap {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - var(--header-h));
+      padding: var(--space-4) var(--page-px) var(--space-6);
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--grid-gap);
+      flex: 1; /* isi ruang kosong */
+      align-content: start;
+    }
     @media (min-width: 560px) { .grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
     @media (min-width: 1200px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
@@ -112,8 +126,18 @@
     .card-cta svg { width: 12px; height: 12px; }
     .card:hover .card-cta, .card:focus-visible .card-cta { transform: translateY(0); opacity: 1; }
 
-    /* PAGINATION */
-    .pager { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin-top: var(--space-8); }
+    /* PAGINATION - selalu di bottom */
+    .pager {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: auto; /* dorong ke bawah */
+      padding-top: var(--space-8);
+      padding-bottom: var(--space-2);
+    }
+    .pager:empty { display: none; }
     .pager__item {
       min-width: 38px; height: 38px; padding: 0 12px; border-radius: var(--radius-sm);
       border: 1px solid var(--border); background: var(--surface); color: var(--text-muted);
@@ -126,6 +150,7 @@
     .pager__item[aria-disabled="true"] { opacity: 0.35; cursor: not-allowed; }
     .pager__gap { color: var(--text-dim); padding: 0 4px; font-size: 13px; }
 
+    /* STATE */
     .state { padding: var(--space-9) var(--space-4); display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-4); grid-column: 1 / -1; }
     .state-icon { width: 56px; height: 56px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; color: var(--text-muted); }
     .state-icon svg { width: 24px; height: 24px; }
@@ -196,10 +221,10 @@
     </div>
   </header>
 
-  <main class="grid-wrap">
+  <div class="main-wrap">
     <div class="grid" id="grid"></div>
     <nav class="pager" id="pager" aria-label="Navigasi halaman"></nav>
-  </main>
+  </div>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Detail wallpaper" hidden>
     <div class="lb-stage">
@@ -234,12 +259,11 @@
     const state = { wallpapers: [], page: 1, id: "" };
     let shownPage = 0, shownId = "", lastFocus = null;
 
-    // Responsive perPage based on device
     function getPerPage() {
       const width = window.innerWidth;
-      if (width < 560) return 8;       // Mobile
-      if (width < 900) return 12;      // Tablet
-      return 20;                        // Desktop
+      if (width < 560) return 8;
+      if (width < 900) return 12;
+      return 20;
     }
 
     function buildHash({ page, id }) {
@@ -297,6 +321,7 @@
           <p>${errorMsg}</p>
           <button class="state-btn" onclick="location.reload()">Muat Ulang</button>
         </div>`;
+      el.pager.replaceChildren(); // hide pager saat error
     }
 
     function createCard(wallpaper, number) {
@@ -333,7 +358,8 @@
       el.count.innerHTML = `<span class="dot" aria-hidden="true"></span><strong>${state.wallpapers.length}</strong> Wallpaper`;
       
       if (!items.length) {
-        el.grid.innerHTML = `<div class="state"><h2>Belum Ada Wallpaper</h2><p>Koleksi wallpaper akan segera ditambahkan.</p></div>`;
+        el.grid.innerHTML = `<div class="state"><h2>Tidak Ada Wallpaper</h2><p>Halaman ini kosong.</p></div>`;
+        el.pager.replaceChildren(); // HIDE pager kalau grid kosong
         return;
       }
       el.grid.replaceChildren(...items.map((w, i) => createCard(w, start + i + 1)));
@@ -352,7 +378,9 @@
 
     function renderPager() {
       const total = pageCount();
-      if (total < 2) return el.pager.replaceChildren();
+      // Hanya render pager kalau ada lebih dari 1 halaman
+      if (total < 2) { el.pager.replaceChildren(); return; }
+      
       const numbers = [...new Set([1, total, state.page - 1, state.page, state.page + 1])].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
       const nodes = [pagerItem("‹", state.page - 1, { disabled: state.page === 1, label: "Sebelumnya" })];
       let last = 0;
@@ -366,7 +394,7 @@
     }
 
     function setBackgroundInert(value) {
-      ["header", "main"].forEach(tag => { const el_tag = document.querySelector(tag); if (el_tag) el_tag.inert = value; });
+      ["header", ".main-wrap"].forEach(sel => { const el_tag = document.querySelector(sel); if (el_tag) el_tag.inert = value; });
     }
 
     function showLightbox(index) {
@@ -443,12 +471,11 @@
       if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > CONFIG.swipeDistance) { e.preventDefault(); step(dx < 0 ? 1 : -1); }
     }, { passive: false });
 
-    // Re-render on resize to adjust perPage
     let resizeTimer;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        shownPage = 0; // Force re-render
+        shownPage = 0;
         render();
       }, 250);
     });
