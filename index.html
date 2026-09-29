@@ -185,8 +185,8 @@
       position: fixed;
       inset: 0;
       z-index: 10;
-      display: grid;
-      place-items: center;
+      display: flex;
+      overflow-y: auto;
       padding: var(--pad) var(--pad) max(var(--pad), env(safe-area-inset-bottom));
       background: rgba(5, 5, 7, .95);
       backdrop-filter: blur(20px);
@@ -196,14 +196,18 @@
     .lightbox[hidden] { display: none; }
 
     .viewer {
+      flex: none;
+      margin: auto;
       display: flex;
       flex-direction: column;
       gap: 20px;
-      width: min(100%, calc((100vh - var(--pad) * 2 - 90px) * 16 / 9));
-      width: min(100%, calc((100dvh - var(--pad) * 2 - 90px) * 16 / 9));
+      width: min(100%, max(320px, calc((100vh - var(--pad) * 2 - 90px) * 16 / 9)));
+      width: min(100%, max(320px, calc((100dvh - var(--pad) * 2 - 90px) * 16 / 9)));
     }
 
     .viewer__frame {
+      position: relative;
+      flex: none;
       aspect-ratio: 16 / 9;
       overflow: hidden;
       border: 1px solid var(--line);
@@ -212,7 +216,7 @@
       box-shadow: 0 40px 100px -20px rgba(0, 0, 0, .9);
     }
 
-    .viewer__frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .viewer__frame img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
 
     .viewer__controls {
       display: flex;
@@ -246,6 +250,11 @@
       .viewer__controls { flex-direction: column-reverse; align-items: stretch; }
       .viewer__nav { justify-content: space-between; }
       .viewer__actions .btn { flex: 1; }
+    }
+
+    @media (max-height: 520px) {
+      .site-header, .site-footer { position: static; }
+      main { padding-bottom: 32px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
