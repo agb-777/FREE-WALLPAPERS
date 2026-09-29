@@ -3,77 +3,224 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Free high-resolution wallpapers.">
+  <meta name="description" content="Free high-resolution wallpapers for desktop.">
   <meta name="theme-color" content="#0a0a0b">
   <meta name="color-scheme" content="dark">
   <title>FREE-WALLPAPERS</title>
+  
+  <!-- Favicon: SVG inline untuk performa -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23141416'/%3E%3Cpath d='M30 70 V30 L70 70 V30' stroke='%23f4f4f6' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  
+  <!-- Font: Bricolage Grotesque -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap">
   
   <style>
+    /* ============================================
+       DESIGN TOKENS
+       ============================================ */
     :root {
-      --bg: #0a0a0b; --surface: #111113; --surface-2: #1a1a1d;
-      --border: #232327; --border-strong: #2f2f35;
-      --text: #f4f4f6; --text-muted: #8a8a92; --text-dim: #5a5a62;
-      --accent: #ffffff; --accent-hover: #e7e7ea;
-      --radius-sm: 6px; --radius: 10px; --radius-lg: 14px;
-      --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
-      --space-5: 20px; --space-6: 24px; --space-7: 32px; --space-8: 40px;
+      /* Colors */
+      --bg: #0a0a0b;
+      --surface: #111113;
+      --surface-2: #1a1a1d;
+      --border: #232327;
+      --border-strong: #2f2f35;
+      --text: #f4f4f6;
+      --text-muted: #8a8a92;
+      --text-dim: #5a5a62;
+      --accent: #ffffff;
+      --accent-hover: #e7e7ea;
+      
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 32px;
+      --space-8: 40px;
       --space-9: 56px;
+      
+      /* Layout */
       --header-h: 64px;
-      --page-px: clamp(12px, 3vw, 24px); --grid-gap: 14px;
+      --page-px: clamp(12px, 3vw, 24px);
+      --grid-gap: 14px;
+      
+      /* Radius */
+      --radius-sm: 6px;
+      --radius: 10px;
+      --radius-lg: 14px;
+      
+      /* Typography */
       --font-sans: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
+      
+      /* Shadows */
       --shadow-md: 0 8px 24px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);
       --shadow-lg: 0 24px 60px rgba(0,0,0,.6), 0 8px 20px rgba(0,0,0,.5);
+      
+      /* Animation */
       --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; }
-    html { -webkit-text-size-adjust: 100%; }
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
-      background: var(--bg); color: var(--text); font-family: var(--font-sans);
-      font-weight: 400; font-size: 15px; line-height: 1.5;
-      -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    a, button { font-family: inherit; color: inherit; cursor: pointer; text-decoration: none; -webkit-tap-highlight-color: transparent; }
-    button { border: 0; background: none; }
-    img { display: block; max-width: 100%; }
-    :focus { outline: none; }
-    :focus-visible { outline: 2px solid rgba(255,255,255,.5); outline-offset: 3px; border-radius: 4px; }
-    .is-locked { overflow: hidden; }
-    .fade { opacity: 0; transition: opacity .5s var(--ease); }
-    .fade.is-loaded { opacity: 1; }
 
-    /* HEADER */
+    a, button {
+      font-family: inherit;
+      color: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      border: 0;
+      background: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* Focus states: hide default, show custom on keyboard nav */
+    :focus {
+      outline: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid rgba(255,255,255,.5);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* Utility classes */
+    .is-locked {
+      overflow: hidden;
+    }
+
+    .fade {
+      opacity: 0;
+      transition: opacity .5s var(--ease);
+    }
+
+    .fade.is-loaded {
+      opacity: 1;
+    }
+
+    /* ============================================
+       HEADER
+       ============================================ */
     .site-header {
-      position: sticky; top: 0; z-index: 50; height: var(--header-h);
-      background: rgba(10, 10, 11, 0.75); backdrop-filter: saturate(140%) blur(14px);
-      -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--border);
-      display: flex; align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: var(--header-h);
+      background: rgba(10, 10, 11, 0.75);
+      backdrop-filter: saturate(140%) blur(14px);
+      -webkit-backdrop-filter: saturate(140%) blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
     }
-    .site-header__inner {
-      width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 var(--page-px);
-      display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
-    }
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-mark {
-      width: 28px; height: 28px; border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, #1e1e22 0%, #0c0c0e 100%);
-      border: 1px solid var(--border-strong); display: grid; place-items: center; flex-shrink: 0;
-    }
-    .brand-mark::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: linear-gradient(135deg, #fff, #b9b9c0); }
-    .brand-name { font-weight: 700; font-size: 15px; letter-spacing: 0.12em; color: var(--text); }
-    .count-chip {
-      display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px;
-      border: 1px solid var(--border); border-radius: 999px; background: var(--surface);
-      font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums;
-    }
-    .count-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #7bd389; box-shadow: 0 0 0 3px rgba(123, 211, 137, 0.15); }
-    .count-chip strong { color: var(--text); font-weight: 600; }
 
-    /* MAIN LAYOUT - flex column supaya pager selalu di bottom */
+    .site-header__inner {
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 var(--page-px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #1e1e22 0%, #0c0c0e 100%);
+      border: 1px solid var(--border-strong);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .brand-mark::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #fff, #b9b9c0);
+    }
+
+    .brand-name {
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.12em;
+      color: var(--text);
+    }
+
+    .count-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      font-size: 13px;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .count-chip .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #7bd389;
+      box-shadow: 0 0 0 3px rgba(123, 211, 137, 0.15);
+    }
+
+    .count-chip strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ============================================
+       MAIN LAYOUT
+       Flex column supaya pager selalu di bottom
+       ============================================ */
     .main-wrap {
       display: flex;
       flex-direction: column;
@@ -83,131 +230,543 @@
       margin: 0 auto;
     }
 
+    /* ============================================
+       GRID
+       ============================================ */
     .grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: var(--grid-gap);
-      flex: 1; /* isi ruang kosong */
+      flex: 1;
       align-content: start;
     }
-    @media (min-width: 560px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 1200px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
 
+    @media (min-width: 560px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 900px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (min-width: 1200px) {
+      .grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    }
+
+    /* ============================================
+       CARD
+       ============================================ */
     .card {
-      position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden;
-      border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
-      isolation: isolate; transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+      position: relative;
+      display: block;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      isolation: isolate;
+      transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
     }
-    .card:hover, .card:focus-visible { border-color: var(--border-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-    .card-img-wrap { position: absolute; inset: 0; overflow: hidden; background: var(--surface-2); }
-    .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease), opacity 0.5s var(--ease); opacity: 0; }
-    .card-img.is-loaded { opacity: 1; }
-    .card:hover .card-img, .card:focus-visible .card-img { transform: scale(1.035); }
 
-    .skeleton { position: absolute; inset: 0; display: grid; place-items: center; background: var(--surface-2); }
-    .skeleton-icon { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border-strong); background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); }
-    @media (prefers-reduced-motion: no-preference) { .skeleton-icon { animation: skeletonPulse 2s ease-in-out infinite; } }
-    @keyframes skeletonPulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
-    .card-img.is-loaded + .skeleton { display: none; }
+    .card:hover,
+    .card:focus-visible {
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
 
+    .card-img-wrap {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--surface-2);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease), opacity 0.5s var(--ease);
+      opacity: 0;
+    }
+
+    .card-img.is-loaded {
+      opacity: 1;
+    }
+
+    .card:hover .card-img,
+    .card:focus-visible .card-img {
+      transform: scale(1.035);
+    }
+
+    /* Skeleton loading placeholder */
+    .skeleton {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: var(--surface-2);
+    }
+
+    .skeleton-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--border-strong);
+      background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .skeleton-icon {
+        animation: skeletonPulse 2s ease-in-out infinite;
+      }
+    }
+
+    @keyframes skeletonPulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .card-img.is-loaded + .skeleton {
+      display: none;
+    }
+
+    /* Card hover overlay */
     .card-overlay {
-      position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 14px 14px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 40px 14px 14px;
       background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.85) 100%);
-      display: flex; align-items: flex-end; justify-content: flex-end;
-      opacity: 0; transition: opacity 0.35s var(--ease); pointer-events: none;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease);
+      pointer-events: none;
     }
-    .card:hover .card-overlay, .card:focus-visible .card-overlay { opacity: 1; }
-    .card-cta {
-      display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
-      background: rgba(255,255,255,0.95); color: #0a0a0b; font-size: 12px; font-weight: 600;
-      transform: translateY(4px); opacity: 0; transition: transform 0.35s var(--ease), opacity 0.3s var(--ease); pointer-events: auto;
-    }
-    .card-cta svg { width: 12px; height: 12px; }
-    .card:hover .card-cta, .card:focus-visible .card-cta { transform: translateY(0); opacity: 1; }
 
-    /* PAGINATION - selalu di bottom */
+    .card:hover .card-overlay,
+    .card:focus-visible .card-overlay {
+      opacity: 1;
+    }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+      color: #0a0a0b;
+      font-size: 12px;
+      font-weight: 600;
+      transform: translateY(4px);
+      opacity: 0;
+      transition: transform 0.35s var(--ease), opacity 0.3s var(--ease);
+      pointer-events: auto;
+    }
+
+    .card-cta svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .card:hover .card-cta,
+    .card:focus-visible .card-cta {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ============================================
+       PAGINATION
+       ============================================ */
     .pager {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
       gap: 6px;
-      margin-top: auto; /* dorong ke bawah */
+      margin-top: auto;
       padding-top: var(--space-8);
       padding-bottom: var(--space-2);
     }
-    .pager:empty { display: none; }
+
+    /* Hide pager when empty */
+    .pager:empty {
+      display: none;
+    }
+
     .pager__item {
-      min-width: 38px; height: 38px; padding: 0 12px; border-radius: var(--radius-sm);
-      border: 1px solid var(--border); background: var(--surface); color: var(--text-muted);
-      font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums;
-      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 38px;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
     }
-    .pager__item:hover:not([aria-disabled="true"]):not([aria-current="page"]) { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
-    .pager__item[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
-    .pager__item[aria-disabled="true"] { opacity: 0.35; cursor: not-allowed; }
-    .pager__gap { color: var(--text-dim); padding: 0 4px; font-size: 13px; }
 
-    /* STATE */
-    .state { padding: var(--space-9) var(--space-4); display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-4); grid-column: 1 / -1; }
-    .state-icon { width: 56px; height: 56px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; color: var(--text-muted); }
-    .state-icon svg { width: 24px; height: 24px; }
-    .state h2 { font-size: 18px; font-weight: 600; color: var(--text); }
-    .state p { color: var(--text-muted); font-size: 14px; max-width: 40ch; margin: 0; }
-    .state-btn { margin-top: var(--space-2); padding: 10px 18px; border-radius: var(--radius); border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font-size: 13px; font-weight: 500; }
-    .state-btn:hover { background: #202024; border-color: #3a3a42; }
+    .pager__item:hover:not([aria-disabled="true"]):not([aria-current="page"]) {
+      background: var(--surface-2);
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
 
-    /* LIGHTBOX */
+    .pager__item[aria-current="page"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+    }
+
+    .pager__item[aria-disabled="true"] {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .pager__gap {
+      color: var(--text-dim);
+      padding: 0 4px;
+      font-size: 13px;
+    }
+
+    /* ============================================
+       STATE (Empty / Error)
+       ============================================ */
+    .state {
+      padding: var(--space-9) var(--space-4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--space-4);
+      grid-column: 1 / -1;
+    }
+
+    .state-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      color: var(--text-muted);
+    }
+
+    .state-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .state h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .state p {
+      color: var(--text-muted);
+      font-size: 14px;
+      max-width: 40ch;
+      margin: 0;
+    }
+
+    .state-btn {
+      margin-top: var(--space-2);
+      padding: 10px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-strong);
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .state-btn:hover {
+      background: #202024;
+      border-color: #3a3a42;
+    }
+
+    /* ============================================
+       LIGHTBOX
+       ============================================ */
     .lightbox {
-      position: fixed; inset: 0; z-index: 100; background: rgba(6, 6, 7, 0.85);
-      backdrop-filter: blur(22px) saturate(120%); -webkit-backdrop-filter: blur(22px) saturate(120%);
-      display: none; align-items: center; justify-content: center; padding: var(--space-4); touch-action: pan-y; animation: lbFade 0.25s var(--ease);
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(6, 6, 7, 0.85);
+      backdrop-filter: blur(22px) saturate(120%);
+      -webkit-backdrop-filter: blur(22px) saturate(120%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      touch-action: pan-y;
+      animation: lbFade 0.25s var(--ease);
     }
-    .lightbox:not([hidden]) { display: flex; }
-    @keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
-    .lb-stage { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-    .lb-img-wrap { position: relative; max-width: min(100%, 1400px); max-height: 100%; display: flex; align-items: center; justify-content: center; }
-    .lb-img { max-width: 100%; max-height: calc(100vh - 120px); border-radius: var(--radius); box-shadow: var(--shadow-lg); object-fit: contain; user-select: none; -webkit-user-drag: none; opacity: 0; transition: opacity 0.4s var(--ease); }
-    .lb-img.is-loaded { opacity: 1; }
-    .lb-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-strong); border-top-color: var(--text); animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-    .lb-close { position: absolute; top: 16px; right: 16px; width: 42px; height: 42px; border-radius: var(--radius); background: rgba(20, 20, 22, 0.75); border: 1px solid var(--border); color: var(--text); display: grid; place-items: center; transition: background 0.2s var(--ease), border-color 0.2s var(--ease); z-index: 5; }
-    .lb-close:hover { background: rgba(30, 30, 34, 0.9); border-color: var(--border-strong); }
-    .lb-close svg { width: 18px; height: 18px; }
-    .lb-download { position: absolute; top: 16px; right: 66px; height: 42px; padding: 0 18px; border-radius: var(--radius); background: var(--accent); color: var(--bg); font-size: 13px; font-weight: 600; letter-spacing: 0.02em; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s var(--ease), transform 0.15s var(--ease); z-index: 5; }
-    .lb-download:hover { background: var(--accent-hover); }
-    .lb-download:active { transform: scale(0.97); }
-    .lb-download svg { width: 15px; height: 15px; }
-    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; border-radius: 50%; background: rgba(20, 20, 22, 0.75); border: 1px solid var(--border); color: var(--text); display: grid; place-items: center; transition: background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease); z-index: 5; }
-    .lb-nav:hover:not(:disabled) { background: rgba(30, 30, 34, 0.9); border-color: var(--border-strong); }
-    .lb-nav:disabled { opacity: 0.3; cursor: not-allowed; }
-    .lb-nav svg { width: 20px; height: 20px; }
-    .lb-prev { left: 16px; } .lb-next { right: 16px; }
-    .lb-prev:hover:not(:disabled) { transform: translateY(-50%) translateX(-2px); }
-    .lb-next:hover:not(:disabled) { transform: translateY(-50%) translateX(2px); }
-    .lb-indicator { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 8px 16px; border-radius: 999px; background: rgba(20, 20, 22, 0.75); border: 1px solid var(--border); color: var(--text-muted); font-size: 13px; font-variant-numeric: tabular-nums; letter-spacing: 0.05em; font-weight: 500; z-index: 5; pointer-events: none; }
+    .lightbox:not([hidden]) {
+      display: flex;
+    }
 
+    @keyframes lbFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .lb-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lb-img-wrap {
+      position: relative;
+      max-width: min(100%, 1400px);
+      max-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lb-img {
+      max-width: 100%;
+      max-height: calc(100vh - 120px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+      opacity: 0;
+      transition: opacity 0.4s var(--ease);
+    }
+
+    .lb-img.is-loaded {
+      opacity: 1;
+    }
+
+    .lb-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border-strong);
+      border-top-color: var(--text);
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Lightbox controls */
+    .lb-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius);
+      background: rgba(20, 20, 22, 0.75);
+      border: 1px solid var(--border);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
+      z-index: 5;
+    }
+
+    .lb-close:hover {
+      background: rgba(30, 30, 34, 0.9);
+      border-color: var(--border-strong);
+    }
+
+    .lb-close svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .lb-download {
+      position: absolute;
+      top: 16px;
+      right: 66px;
+      height: 42px;
+      padding: 0 18px;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: var(--bg);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s var(--ease), transform 0.15s var(--ease);
+      z-index: 5;
+    }
+
+    .lb-download:hover {
+      background: var(--accent-hover);
+    }
+
+    .lb-download:active {
+      transform: scale(0.97);
+    }
+
+    .lb-download svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(20, 20, 22, 0.75);
+      border: 1px solid var(--border);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      transition: background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease);
+      z-index: 5;
+    }
+
+    .lb-nav:hover:not(:disabled) {
+      background: rgba(30, 30, 34, 0.9);
+      border-color: var(--border-strong);
+    }
+
+    .lb-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .lb-nav svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .lb-prev { left: 16px; }
+    .lb-next { right: 16px; }
+
+    .lb-prev:hover:not(:disabled) {
+      transform: translateY(-50%) translateX(-2px);
+    }
+
+    .lb-next:hover:not(:disabled) {
+      transform: translateY(-50%) translateX(2px);
+    }
+
+    .lb-indicator {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(20, 20, 22, 0.75);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
     @media (max-width: 768px) {
-      .lb-download { position: static; width: 100%; justify-content: center; height: 48px; margin-top: var(--space-3); }
-      .lb-close { top: 12px; right: 12px; width: 40px; height: 40px; }
-      .lb-download-wrap { position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 400px; z-index: 5; }
-      .lb-nav { width: 40px; height: 40px; }
-      .lb-prev { left: 8px; } .lb-next { right: 8px; }
-      .lb-img { max-height: calc(100vh - 160px); }
+      .lb-download {
+        position: static;
+        width: 100%;
+        justify-content: center;
+        height: 48px;
+        margin-top: var(--space-3);
+      }
+
+      .lb-close {
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .lb-download-wrap {
+        position: absolute;
+        bottom: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 32px);
+        max-width: 400px;
+        z-index: 5;
+      }
+
+      .lb-nav {
+        width: 40px;
+        height: 40px;
+      }
+
+      .lb-prev { left: 8px; }
+      .lb-next { right: 8px; }
+
+      .lb-img {
+        max-height: calc(100vh - 160px);
+      }
     }
+
     @media (max-width: 560px) {
-      .site-header { height: 56px; }
-      .count-chip { padding: 5px 10px; font-size: 12px; }
-      .pager__item { min-width: 36px; height: 36px; font-size: 12px; }
+      .site-header {
+        height: 56px;
+      }
+
+      .count-chip {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+
+      .pager__item {
+        min-width: 36px;
+        height: 36px;
+        font-size: 12px;
+      }
     }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+    /* Respect user's motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 <body>
 
+  <!-- ============================================
+       HEADER
+       ============================================ -->
   <header class="site-header">
     <div class="site-header__inner">
       <div class="brand">
@@ -221,51 +780,158 @@
     </div>
   </header>
 
+  <!-- ============================================
+       MAIN CONTENT
+       ============================================ -->
   <div class="main-wrap">
     <div class="grid" id="grid"></div>
     <nav class="pager" id="pager" aria-label="Navigasi halaman"></nav>
   </div>
 
+  <!-- ============================================
+       LIGHTBOX
+       ============================================ -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Detail wallpaper" hidden>
     <div class="lb-stage">
       <button class="lb-close" id="close" type="button" aria-label="Tutup">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
       </button>
+      
       <div class="lb-download-wrap">
         <a class="lb-download" id="download" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
           Download
         </a>
       </div>
+
       <button class="lb-nav lb-prev" id="prev" type="button" aria-label="Sebelumnya">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
       </button>
+
       <div class="lb-img-wrap">
         <div class="lb-spinner" id="spinner" aria-hidden="true"></div>
         <img class="lb-img fade" id="image" alt="Wallpaper">
       </div>
+
       <button class="lb-nav lb-next" id="next" type="button" aria-label="Berikutnya">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
       </button>
+
       <div class="lb-indicator" id="position" aria-live="polite">1 / 1</div>
     </div>
   </div>
 
+  <!-- ============================================
+       NOSCRIPT FALLBACK
+       ============================================ -->
+  <noscript>
+    <div class="main-wrap">
+      <div class="state">
+        <div class="state-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h2>JavaScript Diperlukan</h2>
+        <p>Aktifkan JavaScript di browser Anda untuk melihat dan mengunduh wallpaper.</p>
+      </div>
+    </div>
+  </noscript>
+
+  <!-- ============================================
+       JAVASCRIPT
+       ============================================ -->
   <script>
     "use strict";
-    const CONFIG = { dataFile: "./wallpapers.json", swipeDistance: 50 };
-    const $ = (id) => document.getElementById(id);
-    const el = { grid: $("grid"), count: $("count"), pager: $("pager"), lightbox: $("lightbox"), image: $("image"), spinner: $("spinner"), position: $("position"), download: $("download"), close: $("close"), prev: $("prev"), next: $("next") };
-    const state = { wallpapers: [], page: 1, id: "" };
-    let shownPage = 0, shownId = "", lastFocus = null;
 
+    /* ============================================
+       KONFIGURASI
+       ============================================ */
+    const CONFIG = {
+      dataFile: "./wallpapers.json",
+      swipeDistance: 50,
+      resizeDebounce: 250
+    };
+
+    /* ============================================
+       DOM REFERENCES
+       ============================================ */
+    const $ = (id) => document.getElementById(id);
+    const el = {
+      grid: $("grid"),
+      count: $("count"),
+      pager: $("pager"),
+      lightbox: $("lightbox"),
+      image: $("image"),
+      spinner: $("spinner"),
+      position: $("position"),
+      download: $("download"),
+      close: $("close"),
+      prev: $("prev"),
+      next: $("next")
+    };
+
+    /* ============================================
+       STATE MANAGEMENT
+       ============================================ */
+    const state = {
+      wallpapers: [],
+      page: 1,
+      id: ""
+    };
+
+    let shownPage = 0;
+    let shownId = "";
+    let lastFocus = null;
+    let cachedPerPage = null;
+    let cachedWidth = 0;
+
+    /* ============================================
+       UTILITY FUNCTIONS
+       ============================================ */
+
+    /**
+     * Hitung jumlah wallpaper per halaman berdasarkan lebar layar
+     * Mobile (<560px): 8, Tablet (560-899px): 12, Desktop (≥900px): 20
+     */
     function getPerPage() {
       const width = window.innerWidth;
-      if (width < 560) return 8;
-      if (width < 900) return 12;
-      return 20;
+      
+      // Cache hasil untuk performa
+      if (cachedWidth === width && cachedPerPage !== null) {
+        return cachedPerPage;
+      }
+
+      cachedWidth = width;
+      
+      if (width < 560) {
+        cachedPerPage = 8;
+      } else if (width < 900) {
+        cachedPerPage = 12;
+      } else {
+        cachedPerPage = 20;
+      }
+
+      return cachedPerPage;
     }
 
+    /**
+     * Build hash URL untuk navigation
+     * Format: #/?page=2&w=wallpaper-id
+     */
     function buildHash({ page, id }) {
       const params = new URLSearchParams();
       if (page > 1) params.set("page", page);
@@ -274,20 +940,38 @@
       return "#/" + (query ? "?" + query : "");
     }
 
+    /**
+     * Update state dan URL, lalu re-render
+     */
     function goTo(patch) {
       Object.assign(state, patch);
       history.replaceState(null, "", buildHash(state));
       render();
     }
 
+    /**
+     * Parse hash URL untuk mendapatkan page dan id
+     */
     function readHash() {
       const params = new URLSearchParams(location.hash.replace(/^#\/?\??/, ""));
       state.page = Math.max(1, parseInt(params.get("page"), 10) || 1);
       state.id = params.get("w") || "";
     }
 
-    const toId = (url) => String(url).replace(/^https?:\/\/[^/]+\//, "").replace(/\.[a-z0-9]+$/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    /**
+     * Generate ID unik dari URL wallpaper
+     */
+    const toId = (url) => String(url)
+      .replace(/^https?:\/\/[^/]+\//, "")
+      .replace(/\.[a-z0-9]+$/i, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
 
+    /**
+     * Normalisasi data wallpaper dari JSON
+     * Handle berbagai format input dan generate ID unik
+     */
     function normalize(list) {
       const seen = new Set();
       return list.filter((w) => w && (w.thumb || w.preview || w.original)).map((w, i) => {
@@ -295,12 +979,24 @@
         const preview = w.preview || w.thumb || original;
         const thumb = w.thumb || preview;
         let id = toId(original) || "w" + (i + 1);
-        while (seen.has(id)) id += "-" + (i + 1);
+        
+        // Handle duplicate IDs
+        while (seen.has(id)) {
+          id += "-" + (i + 1);
+        }
         seen.add(id);
+        
         return { id, thumb, preview, original };
       });
     }
 
+    /* ============================================
+       DATA LOADING
+       ============================================ */
+
+    /**
+     * Load data wallpaper dari JSON file
+     */
     async function loadData() {
       const res = await fetch(CONFIG.dataFile, { cache: "no-cache" });
       if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
@@ -309,28 +1005,47 @@
       return normalize(list);
     }
 
+    /**
+     * Hitung total halaman
+     */
     const pageCount = () => Math.max(1, Math.ceil(state.wallpapers.length / getPerPage()));
 
+    /* ============================================
+       RENDERING
+       ============================================ */
+
+    /**
+     * Tampilkan pesan error
+     */
     function showError(errorMsg) {
       el.grid.innerHTML = `
         <div class="state">
           <div class="state-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
           </div>
           <h2>Gagal Memuat Data</h2>
           <p>${errorMsg}</p>
           <button class="state-btn" onclick="location.reload()">Muat Ulang</button>
         </div>`;
-      el.pager.replaceChildren(); // hide pager saat error
+      el.pager.replaceChildren();
     }
 
+    /**
+     * Buat elemen card untuk wallpaper
+     */
     function createCard(wallpaper, number) {
       const link = document.createElement("a");
       link.className = "card";
       link.href = buildHash({ page: state.page, id: wallpaper.id });
       link.setAttribute("aria-label", "Buka wallpaper " + number);
+
       const wrap = document.createElement("div");
       wrap.className = "card-img-wrap";
+
       const img = new Image();
       img.className = "card-img fade";
       img.alt = "Wallpaper " + number;
@@ -338,33 +1053,57 @@
       img.decoding = "async";
       img.addEventListener("load", () => img.classList.add("is-loaded"));
       img.src = wallpaper.thumb;
+
       const skeleton = document.createElement("div");
       skeleton.className = "skeleton";
       skeleton.innerHTML = '<div class="skeleton-icon" aria-hidden="true"></div>';
+
       const overlay = document.createElement("div");
       overlay.className = "card-overlay";
-      overlay.innerHTML = `<span class="card-cta">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>`;
+      overlay.innerHTML = `
+        <span class="card-cta">
+          View
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </span>`;
+
       wrap.append(img, skeleton, overlay);
       link.append(wrap);
       return link;
     }
 
+    /**
+     * Render grid wallpaper untuk halaman aktif
+     */
     function renderGrid() {
       const perPage = getPerPage();
       const start = (state.page - 1) * perPage;
       const items = state.wallpapers.slice(start, start + perPage);
-      const total = pageCount();
-      
-      el.count.innerHTML = `<span class="dot" aria-hidden="true"></span><strong>${state.wallpapers.length}</strong> Wallpaper`;
-      
+
+      // Update counter di header
+      el.count.innerHTML = `
+        <span class="dot" aria-hidden="true"></span>
+        <strong>${state.wallpapers.length}</strong> Wallpaper`;
+
+      // Handle empty state
       if (!items.length) {
-        el.grid.innerHTML = `<div class="state"><h2>Tidak Ada Wallpaper</h2><p>Halaman ini kosong.</p></div>`;
-        el.pager.replaceChildren(); // HIDE pager kalau grid kosong
+        el.grid.innerHTML = `
+          <div class="state">
+            <h2>Tidak Ada Wallpaper</h2>
+            <p>Halaman ini kosong.</p>
+          </div>`;
+        el.pager.replaceChildren();
         return;
       }
+
       el.grid.replaceChildren(...items.map((w, i) => createCard(w, start + i + 1)));
     }
 
+    /**
+     * Buat elemen pagination item
+     */
     function pagerItem(text, page, { current = false, disabled = false, label = "" } = {}) {
       const node = document.createElement(disabled ? "span" : "a");
       node.className = "pager__item";
@@ -376,30 +1115,63 @@
       return node;
     }
 
+    /**
+     * Render pagination controls
+     */
     function renderPager() {
       const total = pageCount();
-      // Hanya render pager kalau ada lebih dari 1 halaman
-      if (total < 2) { el.pager.replaceChildren(); return; }
       
-      const numbers = [...new Set([1, total, state.page - 1, state.page, state.page + 1])].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
+      // Sembunyikan pager kalau cuma 1 halaman
+      if (total < 2) {
+        el.pager.replaceChildren();
+        return;
+      }
+
+      // Generate page numbers dengan ellipsis
+      const numbers = [...new Set([1, total, state.page - 1, state.page, state.page + 1])]
+        .filter((n) => n >= 1 && n <= total)
+        .sort((a, b) => a - b);
+
       const nodes = [pagerItem("‹", state.page - 1, { disabled: state.page === 1, label: "Sebelumnya" })];
       let last = 0;
+
       for (const n of numbers) {
-        if (n - last > 1) { const gap = document.createElement("span"); gap.className = "pager__gap"; gap.textContent = "…"; nodes.push(gap); }
+        if (n - last > 1) {
+          const gap = document.createElement("span");
+          gap.className = "pager__gap";
+          gap.textContent = "…";
+          nodes.push(gap);
+        }
         nodes.push(pagerItem(n, n, { current: n === state.page }));
         last = n;
       }
+
       nodes.push(pagerItem("›", state.page + 1, { disabled: state.page === total, label: "Berikutnya" }));
       el.pager.replaceChildren(...nodes);
     }
 
+    /**
+     * Set inert pada background elements saat lightbox terbuka
+     */
     function setBackgroundInert(value) {
-      ["header", ".main-wrap"].forEach(sel => { const el_tag = document.querySelector(sel); if (el_tag) el_tag.inert = value; });
+      ["header", ".main-wrap"].forEach(sel => {
+        const element = document.querySelector(sel);
+        if (element) element.inert = value;
+      });
     }
 
+    /* ============================================
+       LIGHTBOX
+       ============================================ */
+
+    /**
+     * Tampilkan lightbox dengan wallpaper tertentu
+     */
     function showLightbox(index) {
       const { wallpapers } = state;
       const wallpaper = wallpapers[index];
+
+      // Open lightbox kalau belum terbuka
       if (el.lightbox.hidden) {
         lastFocus = document.activeElement;
         setBackgroundInert(true);
@@ -407,18 +1179,37 @@
         document.documentElement.classList.add("is-locked");
         el.close.focus();
       }
+
+      // Skip kalau wallpaper sama
       if (shownId === wallpaper.id) return;
       shownId = wallpaper.id;
+
+      // Reset dan load image
       el.image.classList.remove("is-loaded");
       el.spinner.style.display = "block";
-      el.image.onload = () => { el.image.classList.add("is-loaded"); el.spinner.style.display = "none"; };
-      el.image.onerror = () => { el.spinner.style.display = "none"; };
+      
+      el.image.onload = () => {
+        el.image.classList.add("is-loaded");
+        el.spinner.style.display = "none";
+      };
+      
+      el.image.onerror = () => {
+        el.spinner.style.display = "none";
+      };
+
       el.image.src = wallpaper.preview;
       el.download.href = wallpaper.original;
       el.position.textContent = `${index + 1} / ${wallpapers.length}`;
-      for (const d of [-1, 1]) { new Image().src = wallpapers[(index + d + wallpapers.length) % wallpapers.length].preview; }
+
+      // Preload adjacent images untuk navigasi cepat
+      for (const d of [-1, 1]) {
+        new Image().src = wallpapers[(index + d + wallpapers.length) % wallpapers.length].preview;
+      }
     }
 
+    /**
+     * Tutup lightbox dan restore state
+     */
     function hideLightbox() {
       if (el.lightbox.hidden) return;
       shownId = "";
@@ -428,6 +1219,9 @@
       if (lastFocus) lastFocus.focus({ preventScroll: true });
     }
 
+    /**
+     * Navigasi ke wallpaper sebelumnya/sesudahnya
+     */
     function step(direction) {
       const { wallpapers, id } = state;
       if (wallpapers.length < 2) return;
@@ -435,25 +1229,56 @@
       goTo({ id: wallpapers[(index + direction + wallpapers.length) % wallpapers.length].id });
     }
 
+    /**
+     * Main render function - orchestrates grid, pager, dan lightbox
+     */
     function render() {
       const index = state.wallpapers.findIndex((w) => w.id === state.id);
-      if (index >= 0) state.page = Math.floor(index / getPerPage()) + 1;
+      
+      // Auto-correct page kalau ada ID wallpaper
+      if (index >= 0) {
+        state.page = Math.floor(index / getPerPage()) + 1;
+      }
+      
+      // Clamp page ke range valid
       state.page = Math.min(state.page, pageCount());
+
+      // Re-render grid dan pager kalau page berubah
       if (state.page !== shownPage) {
         const isFirstRender = shownPage === 0;
         shownPage = state.page;
         renderGrid();
         renderPager();
-        if (!isFirstRender) window.scrollTo({ top: 0, behavior: "smooth" });
+        if (!isFirstRender) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       }
-      if (index >= 0) showLightbox(index);
-      else hideLightbox();
+
+      // Show/hide lightbox
+      if (index >= 0) {
+        showLightbox(index);
+      } else {
+        hideLightbox();
+      }
     }
 
+    /* ============================================
+       EVENT LISTENERS
+       ============================================ */
+
+    // Lightbox controls
     el.close.addEventListener("click", () => goTo({ id: "" }));
     el.prev.addEventListener("click", () => step(-1));
     el.next.addEventListener("click", () => step(1));
-    el.lightbox.addEventListener("click", (e) => { if (e.target === el.lightbox || e.target.closest(".lb-stage") === e.target) goTo({ id: "" }); });
+
+    // Click outside to close
+    el.lightbox.addEventListener("click", (e) => {
+      if (e.target === el.lightbox || e.target.closest(".lb-stage") === e.target) {
+        goTo({ id: "" });
+      }
+    });
+
+    // Keyboard navigation
     document.addEventListener("keydown", (e) => {
       if (el.lightbox.hidden) return;
       if (e.key === "Escape") goTo({ id: "" });
@@ -461,39 +1286,72 @@
       else if (e.key === "ArrowRight") step(1);
     });
 
-    let touchStartX = null, touchStartY = null;
-    el.lightbox.addEventListener("touchstart", (e) => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, { passive: true });
+    // Touch swipe navigation
+    let touchStartX = null;
+    let touchStartY = null;
+
+    el.lightbox.addEventListener("touchstart", (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
     el.lightbox.addEventListener("touchend", (e) => {
       if (touchStartX === null || touchStartY === null) return;
       const dx = e.changedTouches[0].clientX - touchStartX;
       const dy = e.changedTouches[0].clientY - touchStartY;
-      touchStartX = null; touchStartY = null;
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > CONFIG.swipeDistance) { e.preventDefault(); step(dx < 0 ? 1 : -1); }
+      touchStartX = null;
+      touchStartY = null;
+      
+      // Hanya trigger kalau horizontal swipe dominan
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > CONFIG.swipeDistance) {
+        e.preventDefault();
+        step(dx < 0 ? 1 : -1);
+      }
     }, { passive: false });
 
+    // Handle window resize untuk update perPage
     let resizeTimer;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
+        // Reset cache dan force re-render
+        cachedPerPage = null;
+        cachedWidth = 0;
         shownPage = 0;
         render();
-      }, 250);
+      }, CONFIG.resizeDebounce);
     });
 
+    // Hash change listener
+    window.addEventListener("hashchange", () => {
+      readHash();
+      render();
+    });
+
+    /* ============================================
+       INITIALIZATION
+       ============================================ */
     async function init() {
       try {
         state.wallpapers = await loadData();
         readHash();
         render();
-        window.addEventListener("hashchange", () => { readHash(); render(); });
       } catch (err) {
         console.error("Load Error:", err);
         let msg = "Terjadi kesalahan saat memuat data.";
-        if (err.message.includes("404")) msg = "File <code>wallpapers.json</code> tidak ditemukan. Pastikan nama file huruf kecil semua dan sudah di-push ke GitHub.";
-        else if (err.message.includes("Unexpected token")) msg = "Format <code>wallpapers.json</code> tidak valid.";
+        
+        // Specific error messages untuk debugging
+        if (err.message.includes("404")) {
+          msg = "File <code>wallpapers.json</code> tidak ditemukan. Pastikan nama file huruf kecil semua dan sudah di-push ke GitHub.";
+        } else if (err.message.includes("Unexpected token")) {
+          msg = "Format <code>wallpapers.json</code> tidak valid. Cek sintaks JSON (koma berlebih, tanda kutip kurang, dll).";
+        }
+        
         showError(msg);
       }
     }
+
+    // Start app
     init();
   </script>
 </body>
