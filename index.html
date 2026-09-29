@@ -22,6 +22,7 @@
       --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
       --space-5: 20px; --space-6: 24px; --space-7: 32px; --space-8: 40px;
       --space-9: 56px;
+      --header-h: 64px;
       --page-px: clamp(12px, 3vw, 24px); --grid-gap: 14px;
       --font-sans: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
       --shadow-md: 0 8px 24px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);
@@ -45,6 +46,34 @@
     .fade { opacity: 0; transition: opacity .5s var(--ease); }
     .fade.is-loaded { opacity: 1; }
 
+    /* HEADER */
+    .site-header {
+      position: sticky; top: 0; z-index: 50; height: var(--header-h);
+      background: rgba(10, 10, 11, 0.75); backdrop-filter: saturate(140%) blur(14px);
+      -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+    }
+    .site-header__inner {
+      width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 var(--page-px);
+      display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-mark {
+      width: 28px; height: 28px; border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #1e1e22 0%, #0c0c0e 100%);
+      border: 1px solid var(--border-strong); display: grid; place-items: center; flex-shrink: 0;
+    }
+    .brand-mark::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: linear-gradient(135deg, #fff, #b9b9c0); }
+    .brand-name { font-weight: 700; font-size: 15px; letter-spacing: 0.12em; color: var(--text); }
+    .count-chip {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px;
+      border: 1px solid var(--border); border-radius: 999px; background: var(--surface);
+      font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums;
+    }
+    .count-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #7bd389; box-shadow: 0 0 0 3px rgba(123, 211, 137, 0.15); }
+    .count-chip strong { color: var(--text); font-weight: 600; }
+
+    /* GRID */
     .grid-wrap { padding: var(--space-4) var(--page-px); max-width: 1600px; margin: 0 auto; }
     .grid { display: grid; grid-template-columns: 1fr; gap: var(--grid-gap); }
     @media (min-width: 560px) { .grid { grid-template-columns: repeat(2, 1fr); } }
@@ -83,6 +112,20 @@
     .card-cta svg { width: 12px; height: 12px; }
     .card:hover .card-cta, .card:focus-visible .card-cta { transform: translateY(0); opacity: 1; }
 
+    /* PAGINATION */
+    .pager { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin-top: var(--space-8); }
+    .pager__item {
+      min-width: 38px; height: 38px; padding: 0 12px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border); background: var(--surface); color: var(--text-muted);
+      font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+    .pager__item:hover:not([aria-disabled="true"]):not([aria-current="page"]) { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
+    .pager__item[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+    .pager__item[aria-disabled="true"] { opacity: 0.35; cursor: not-allowed; }
+    .pager__gap { color: var(--text-dim); padding: 0 4px; font-size: 13px; }
+
     .state { padding: var(--space-9) var(--space-4); display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-4); grid-column: 1 / -1; }
     .state-icon { width: 56px; height: 56px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; color: var(--text-muted); }
     .state-icon svg { width: 24px; height: 24px; }
@@ -91,6 +134,7 @@
     .state-btn { margin-top: var(--space-2); padding: 10px 18px; border-radius: var(--radius); border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font-size: 13px; font-weight: 500; }
     .state-btn:hover { background: #202024; border-color: #3a3a42; }
 
+    /* LIGHTBOX */
     .lightbox {
       position: fixed; inset: 0; z-index: 100; background: rgba(6, 6, 7, 0.85);
       backdrop-filter: blur(22px) saturate(120%); -webkit-backdrop-filter: blur(22px) saturate(120%);
@@ -129,13 +173,32 @@
       .lb-prev { left: 8px; } .lb-next { right: 8px; }
       .lb-img { max-height: calc(100vh - 160px); }
     }
+    @media (max-width: 560px) {
+      .site-header { height: 56px; }
+      .count-chip { padding: 5px 10px; font-size: 12px; }
+      .pager__item { min-width: 36px; height: 36px; font-size: 12px; }
+    }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
   </style>
 </head>
 <body>
 
+  <header class="site-header">
+    <div class="site-header__inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <span class="brand-name">FREE-WALLPAPERS</span>
+      </div>
+      <div class="count-chip" id="count">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Memuat...</span>
+      </div>
+    </div>
+  </header>
+
   <main class="grid-wrap">
     <div class="grid" id="grid"></div>
+    <nav class="pager" id="pager" aria-label="Navigasi halaman"></nav>
   </main>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Detail wallpaper" hidden>
@@ -167,22 +230,35 @@
     "use strict";
     const CONFIG = { dataFile: "./wallpapers.json", swipeDistance: 50 };
     const $ = (id) => document.getElementById(id);
-    const el = { grid: $("grid"), lightbox: $("lightbox"), image: $("image"), spinner: $("spinner"), position: $("position"), download: $("download"), close: $("close"), prev: $("prev"), next: $("next") };
-    const state = { wallpapers: [], id: "" };
-    let shownId = "", lastFocus = null;
+    const el = { grid: $("grid"), count: $("count"), pager: $("pager"), lightbox: $("lightbox"), image: $("image"), spinner: $("spinner"), position: $("position"), download: $("download"), close: $("close"), prev: $("prev"), next: $("next") };
+    const state = { wallpapers: [], page: 1, id: "" };
+    let shownPage = 0, shownId = "", lastFocus = null;
 
-    function buildHash(id) {
-      return id ? "#/?" + new URLSearchParams({ w: id }).toString() : "#/";
+    // Responsive perPage based on device
+    function getPerPage() {
+      const width = window.innerWidth;
+      if (width < 560) return 8;       // Mobile
+      if (width < 900) return 12;      // Tablet
+      return 20;                        // Desktop
     }
 
-    function goTo(id) {
-      state.id = id;
-      history.replaceState(null, "", buildHash(id));
+    function buildHash({ page, id }) {
+      const params = new URLSearchParams();
+      if (page > 1) params.set("page", page);
+      if (id) params.set("w", id);
+      const query = params.toString();
+      return "#/" + (query ? "?" + query : "");
+    }
+
+    function goTo(patch) {
+      Object.assign(state, patch);
+      history.replaceState(null, "", buildHash(state));
       render();
     }
 
     function readHash() {
       const params = new URLSearchParams(location.hash.replace(/^#\/?\??/, ""));
+      state.page = Math.max(1, parseInt(params.get("page"), 10) || 1);
       state.id = params.get("w") || "";
     }
 
@@ -209,6 +285,8 @@
       return normalize(list);
     }
 
+    const pageCount = () => Math.max(1, Math.ceil(state.wallpapers.length / getPerPage()));
+
     function showError(errorMsg) {
       el.grid.innerHTML = `
         <div class="state">
@@ -224,7 +302,7 @@
     function createCard(wallpaper, number) {
       const link = document.createElement("a");
       link.className = "card";
-      link.href = buildHash(wallpaper.id);
+      link.href = buildHash({ page: state.page, id: wallpaper.id });
       link.setAttribute("aria-label", "Buka wallpaper " + number);
       const wrap = document.createElement("div");
       wrap.className = "card-img-wrap";
@@ -247,12 +325,48 @@
     }
 
     function renderGrid() {
-      if (!state.wallpapers.length) return;
-      el.grid.replaceChildren(...state.wallpapers.map((w, i) => createCard(w, i + 1)));
+      const perPage = getPerPage();
+      const start = (state.page - 1) * perPage;
+      const items = state.wallpapers.slice(start, start + perPage);
+      const total = pageCount();
+      
+      el.count.innerHTML = `<span class="dot" aria-hidden="true"></span><strong>${state.wallpapers.length}</strong> Wallpaper`;
+      
+      if (!items.length) {
+        el.grid.innerHTML = `<div class="state"><h2>Belum Ada Wallpaper</h2><p>Koleksi wallpaper akan segera ditambahkan.</p></div>`;
+        return;
+      }
+      el.grid.replaceChildren(...items.map((w, i) => createCard(w, start + i + 1)));
+    }
+
+    function pagerItem(text, page, { current = false, disabled = false, label = "" } = {}) {
+      const node = document.createElement(disabled ? "span" : "a");
+      node.className = "pager__item";
+      node.textContent = text;
+      if (label) node.setAttribute("aria-label", label);
+      if (disabled) node.setAttribute("aria-disabled", "true");
+      else node.href = buildHash({ page, id: "" });
+      if (current) node.setAttribute("aria-current", "page");
+      return node;
+    }
+
+    function renderPager() {
+      const total = pageCount();
+      if (total < 2) return el.pager.replaceChildren();
+      const numbers = [...new Set([1, total, state.page - 1, state.page, state.page + 1])].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
+      const nodes = [pagerItem("‹", state.page - 1, { disabled: state.page === 1, label: "Sebelumnya" })];
+      let last = 0;
+      for (const n of numbers) {
+        if (n - last > 1) { const gap = document.createElement("span"); gap.className = "pager__gap"; gap.textContent = "…"; nodes.push(gap); }
+        nodes.push(pagerItem(n, n, { current: n === state.page }));
+        last = n;
+      }
+      nodes.push(pagerItem("›", state.page + 1, { disabled: state.page === total, label: "Berikutnya" }));
+      el.pager.replaceChildren(...nodes);
     }
 
     function setBackgroundInert(value) {
-      document.querySelector("main").inert = value;
+      ["header", "main"].forEach(tag => { const el_tag = document.querySelector(tag); if (el_tag) el_tag.inert = value; });
     }
 
     function showLightbox(index) {
@@ -290,22 +404,31 @@
       const { wallpapers, id } = state;
       if (wallpapers.length < 2) return;
       const index = wallpapers.findIndex((w) => w.id === id);
-      goTo(wallpapers[(index + direction + wallpapers.length) % wallpapers.length].id);
+      goTo({ id: wallpapers[(index + direction + wallpapers.length) % wallpapers.length].id });
     }
 
     function render() {
       const index = state.wallpapers.findIndex((w) => w.id === state.id);
+      if (index >= 0) state.page = Math.floor(index / getPerPage()) + 1;
+      state.page = Math.min(state.page, pageCount());
+      if (state.page !== shownPage) {
+        const isFirstRender = shownPage === 0;
+        shownPage = state.page;
+        renderGrid();
+        renderPager();
+        if (!isFirstRender) window.scrollTo({ top: 0, behavior: "smooth" });
+      }
       if (index >= 0) showLightbox(index);
       else hideLightbox();
     }
 
-    el.close.addEventListener("click", () => goTo(""));
+    el.close.addEventListener("click", () => goTo({ id: "" }));
     el.prev.addEventListener("click", () => step(-1));
     el.next.addEventListener("click", () => step(1));
-    el.lightbox.addEventListener("click", (e) => { if (e.target === el.lightbox || e.target.closest(".lb-stage") === e.target) goTo(""); });
+    el.lightbox.addEventListener("click", (e) => { if (e.target === el.lightbox || e.target.closest(".lb-stage") === e.target) goTo({ id: "" }); });
     document.addEventListener("keydown", (e) => {
       if (el.lightbox.hidden) return;
-      if (e.key === "Escape") goTo("");
+      if (e.key === "Escape") goTo({ id: "" });
       else if (e.key === "ArrowLeft") step(-1);
       else if (e.key === "ArrowRight") step(1);
     });
@@ -320,11 +443,20 @@
       if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > CONFIG.swipeDistance) { e.preventDefault(); step(dx < 0 ? 1 : -1); }
     }, { passive: false });
 
+    // Re-render on resize to adjust perPage
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        shownPage = 0; // Force re-render
+        render();
+      }, 250);
+    });
+
     async function init() {
       try {
         state.wallpapers = await loadData();
         readHash();
-        renderGrid();
         render();
         window.addEventListener("hashchange", () => { readHash(); render(); });
       } catch (err) {
