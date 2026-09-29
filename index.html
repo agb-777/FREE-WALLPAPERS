@@ -170,11 +170,11 @@ function apply(){
     const items=L.slice((page-1)*PER_PAGE,page*PER_PAGE);
     $("count").textContent=L.length+" wallpaper"+(pages>1?` • halaman ${page} dari ${pages}`:"");
     $("grid").innerHTML=items.length?items.map(w=>`
-      <a class="card" href="${build({page,w:w.id})}" aria-label="Buka ${w.title}">
+      <a class="card" href="${build({page,w:w.id})}" aria-label="Buka ${w.title||"wallpaper"}">
         <div class="thumb"><div class="ph" style="background:${grad(w)}"></div>
-          ${w.thumb?`<img data-src="${w.thumb}" alt="${w.title}" decoding="async">`:""}
-          <span class="badge">${w.resolution}</span></div>
-        <div class="meta"><b>${w.title}</b><span>${w.category}</span></div>
+          ${w.thumb?`<img data-src="${w.thumb}" alt="${w.title||"Wallpaper"}" decoding="async">`:""}
+          ${w.resolution?`<span class="badge">${w.resolution}</span>`:""}</div>
+        ${w.title||w.category?`<div class="meta"><b>${w.title||""}</b><span>${w.category||""}</span></div>`:""}
       </a>`).join(""):`<p class="empty">Nggak ada wallpaper yang cocok. Coba kata kunci atau kategori lain.</p>`;
     document.querySelectorAll("#grid img").forEach(im=>io.observe(im));
     $("pager").innerHTML=pager(page,pages);
@@ -184,7 +184,7 @@ function apply(){
 
   const w=WALLPAPERS.find(x=>x.id===S.w);
   if(w){LB=L.includes(w)?L:[w];showLB(w)}else closeLB();
-  document.title=w?`${w.title} — ${SITE}`:(S.cat!=="Semua"?`${S.cat} — ${SITE}`:`${SITE} — Wallpaper Desktop`);
+  document.title=w?`${w.title||"Wallpaper"} — ${SITE}`:(S.cat!=="Semua"?`${S.cat} — ${SITE}`:`${SITE} — Wallpaper Desktop`);
 }
 function pager(page,pages){
   if(pages<2)return "";
@@ -201,13 +201,13 @@ function pager(page,pages){
 /* ---- lightbox ---- */
 function showLB(w){
   if(!lbOpen){lbOpen=true;$("lb").classList.add("open");document.body.style.overflow="hidden";$("cl").focus()}
-  $("lbt").textContent=w.title;
-  $("lbm").textContent=`${w.category} • ${w.resolution} • ${w.size}`;
+  $("lbt").textContent=w.title||"";
+  $("lbm").textContent=[w.category,w.resolution,w.size].filter(Boolean).join(" • ");
   $("lb").style.background=`radial-gradient(1000px 600px at 50% 40%,${w.colors[0]}cc,#0d0b12 75%)`;
   $("lph").style.background=grad(w);
-  const im=$("lim");im.style.opacity=0;im.alt=w.title;
+  const im=$("lim");im.style.opacity=0;im.alt=w.title||"Wallpaper";
   if(w.preview){im.onload=()=>im.style.opacity=1;im.src=w.preview}else im.removeAttribute("src");
-  $("dl").href=w.original;$("dl").textContent="Download "+w.size;
+  $("dl").href=w.original;$("dl").textContent="Download"+(w.size?" "+w.size:"");
   // preload tetangga
   [-1,1].forEach(d=>{const n=LB[(LB.indexOf(w)+d+LB.length)%LB.length];if(n&&n.preview)new Image().src=n.preview});
 }
@@ -244,8 +244,19 @@ async function init(){
     const r=await fetch("wallpapers.json",{cache:"no-cache"});
     if(!r.ok)throw new Error("HTTP "+r.status);
     WALLPAPERS=await r.json();
-    WALLPAPERS.forEach(w=>{w.id=w.id||slug(w.title);w.colors=w.colors||["#2a2540","#4a4470"]});
-    cats=["Semua",...new Set(WALLPAPERS.map(w=>w.category))];
+    const seen=new Set();
+    WALLPAPERS.forEach((w,i)=>{
+      w.original=w.original||w.preview||w.thumb;
+      w.preview=w.preview||w.thumb||w.original;
+      w.thumb=w.thumb||w.preview;
+      w.colors=w.colors||["#2a2540","#4a4470"];
+      let id=w.id||slug((w.original||"").replace(/^https?:\/\/[^\/]+\//,"").replace(/\.[a-z0-9]+$/i,""))||("w"+(i+1));
+      while(seen.has(id))id+="-"+(i+1);
+      seen.add(id);w.id=id;
+    });
+    cats=["Semua",...new Set(WALLPAPERS.map(w=>w.category).filter(Boolean))];
+    $("chips").style.display=cats.length<2?"none":"";
+    $("q").style.display=WALLPAPERS.some(w=>w.title||w.category)?"":"none";
   }catch(e){
     $("count").textContent="";
     $("grid").innerHTML='<p class="empty">Gagal memuat wallpapers.json. Cek nama file dan format JSON-nya. Kalau dibuka langsung dari folder, jalankan lewat server lokal atau GitHub Pages.</p>';
