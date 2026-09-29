@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Free high-resolution wallpapers for your desktop.">
+  <meta name="description" content="Free high-resolution wallpapers.">
   <meta name="theme-color" content="#0a0a0b">
   <meta name="color-scheme" content="dark">
   <title>FREE-WALLPAPERS</title>
@@ -16,20 +16,21 @@
     :root {
       --bg: #0a0a0b; --surface: #111113; --surface-2: #1a1a1d;
       --border: #232327; --border-strong: #2f2f35;
-      --text: #f4f4f6; --text-muted: #8a8a92; --text-dim: #5a5a62;
+      --text: #f4f4f6; --text-muted: #8a8a92;
       --accent: #ffffff; --accent-hover: #e7e7ea;
       --radius-sm: 6px; --radius: 10px; --radius-lg: 14px;
       --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
       --space-5: 20px; --space-6: 24px; --space-7: 32px; --space-8: 40px;
-      --space-9: 56px; --space-10: 80px;
-      --header-h: 72px; --page-px: clamp(16px, 4vw, 32px); --grid-gap: 18px;
+      --space-9: 56px;
+      --page-px: clamp(12px, 3vw, 24px); --grid-gap: 14px;
       --font-sans: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
       --shadow-md: 0 8px 24px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);
       --shadow-lg: 0 24px 60px rgba(0,0,0,.6), 0 8px 20px rgba(0,0,0,.5);
       --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; }
-    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    html { -webkit-text-size-adjust: 100%; }
     body {
       background: var(--bg); color: var(--text); font-family: var(--font-sans);
       font-weight: 400; font-size: 15px; line-height: 1.5;
@@ -43,44 +44,22 @@
     .is-locked { overflow: hidden; }
     .fade { opacity: 0; transition: opacity .5s var(--ease); }
     .fade.is-loaded { opacity: 1; }
-    .wrap { max-width: 1440px; margin: 0 auto; padding: 0 var(--page-px); }
 
-    .site-header {
-      position: sticky; top: 0; z-index: 50; height: var(--header-h);
-      background: rgba(10, 10, 11, 0.75); backdrop-filter: saturate(140%) blur(14px);
-      -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--border);
+    /* GRID ONLY */
+    .grid-wrap {
+      padding: var(--space-4) var(--page-px);
+      max-width: 1600px;
+      margin: 0 auto;
     }
-    .site-header__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); height: 100%; }
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-mark {
-      width: 28px; height: 28px; border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, #1e1e22 0%, #0c0c0e 100%);
-      border: 1px solid var(--border-strong); display: grid; place-items: center; flex-shrink: 0;
-    }
-    .brand-mark::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: linear-gradient(135deg, #fff, #b9b9c0); }
-    .brand-name { font-weight: 700; font-size: 15px; letter-spacing: 0.12em; color: var(--text); }
-    .count-chip {
-      display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px;
-      border: 1px solid var(--border); border-radius: 999px; background: var(--surface);
-      font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums;
-    }
-    .count-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #7bd389; box-shadow: 0 0 0 3px rgba(123, 211, 137, 0.15); }
-    .count-chip strong { color: var(--text); font-weight: 600; }
 
-    .hero { padding: var(--space-8) 0 var(--space-6); border-bottom: 1px solid var(--border); }
-    .hero-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-3); }
-    .hero-eyebrow .line { width: 24px; height: 1px; background: var(--border-strong); }
-    .hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.1; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 var(--space-3); color: var(--text); max-width: 20ch; }
-    .hero p { margin: 0 0 var(--space-5); color: var(--text-muted); font-size: 15px; max-width: 50ch; }
-    .hero-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 13px; color: var(--text-muted); }
-    .hero-meta .sep { width: 3px; height: 3px; border-radius: 50%; background: var(--text-dim); }
-    .hero-meta strong { color: var(--text); font-weight: 500; }
-
-    main { padding-top: var(--space-7); padding-bottom: var(--space-9); }
-    .grid { display: grid; grid-template-columns: 1fr; gap: var(--grid-gap); }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--grid-gap);
+    }
     @media (min-width: 560px) { .grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 1200px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+    @media (min-width: 1200px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
 
     .card {
       position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden;
@@ -115,7 +94,8 @@
     .card-cta svg { width: 12px; height: 12px; }
     .card:hover .card-cta, .card:focus-visible .card-cta { transform: translateY(0); opacity: 1; }
 
-    .state { grid-column: 1 / -1; padding: var(--space-10) var(--space-4); display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-4); }
+    /* ERROR STATE */
+    .state { padding: var(--space-9) var(--space-4); display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-4); grid-column: 1 / -1; }
     .state-icon { width: 56px; height: 56px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; color: var(--text-muted); }
     .state-icon svg { width: 24px; height: 24px; }
     .state h2 { font-size: 18px; font-weight: 600; color: var(--text); }
@@ -123,19 +103,7 @@
     .state-btn { margin-top: var(--space-2); padding: 10px 18px; border-radius: var(--radius); border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font-size: 13px; font-weight: 500; }
     .state-btn:hover { background: #202024; border-color: #3a3a42; }
 
-    .pager { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin-top: var(--space-8); }
-    .pager__item {
-      min-width: 38px; height: 38px; padding: 0 12px; border-radius: var(--radius-sm);
-      border: 1px solid var(--border); background: var(--surface); color: var(--text-muted);
-      font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums;
-      display: inline-flex; align-items: center; justify-content: center;
-      transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
-    }
-    .pager__item:hover:not([aria-disabled="true"]):not([aria-current="page"]) { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
-    .pager__item[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
-    .pager__item[aria-disabled="true"] { opacity: 0.35; cursor: not-allowed; }
-    .pager__gap { color: var(--text-dim); padding: 0 4px; font-size: 13px; }
-
+    /* LIGHTBOX */
     .lightbox {
       position: fixed; inset: 0; z-index: 100; background: rgba(6, 6, 7, 0.85);
       backdrop-filter: blur(22px) saturate(120%); -webkit-backdrop-filter: blur(22px) saturate(120%);
@@ -166,12 +134,7 @@
     .lb-next:hover:not(:disabled) { transform: translateY(-50%) translateX(2px); }
     .lb-indicator { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 8px 16px; border-radius: 999px; background: rgba(20, 20, 22, 0.75); border: 1px solid var(--border); color: var(--text-muted); font-size: 13px; font-variant-numeric: tabular-nums; letter-spacing: 0.05em; font-weight: 500; z-index: 5; pointer-events: none; }
 
-    .site-footer { padding: var(--space-6) var(--page-px); border-top: 1px solid var(--border); color: var(--text-dim); font-size: 13px; text-align: center; letter-spacing: 0.02em; }
-
     @media (max-width: 768px) {
-      .brand-name { font-size: 14px; }
-      .hero { padding: var(--space-6) 0 var(--space-5); }
-      .hero h1 { font-size: 24px; }
       .lb-download { position: static; width: 100%; justify-content: center; height: 48px; margin-top: var(--space-3); }
       .lb-close { top: 12px; right: 12px; width: 40px; height: 40px; }
       .lb-download-wrap { position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 400px; z-index: 5; }
@@ -179,47 +142,14 @@
       .lb-prev { left: 8px; } .lb-next { right: 8px; }
       .lb-img { max-height: calc(100vh - 160px); }
     }
-    @media (max-width: 560px) {
-      .site-header { height: 64px; }
-      .count-chip { padding: 5px 10px; font-size: 12px; }
-      .pager__item { min-width: 36px; height: 36px; font-size: 12px; }
-    }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap site-header__inner">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true"></div>
-        <span class="brand-name">FREE-WALLPAPERS</span>
-      </div>
-      <div class="count-chip" id="count">
-        <span class="dot" aria-hidden="true"></span>
-        <span>Memuat...</span>
-      </div>
-    </div>
-  </header>
 
-  <div class="wrap">
-    <section class="hero">
-      <div class="hero-eyebrow"><span class="line" aria-hidden="true"></span><span>Koleksi Premium</span></div>
-      <h1>High-quality wallpapers for your desktop.</h1>
-      <p>Free high-resolution wallpapers curated for a clean, modern, and professional setup.</p>
-      <div class="hero-meta">
-        <strong id="meta-count">0</strong> <span>Wallpapers</span>
-        <span class="sep" aria-hidden="true"></span><span>Free Download</span>
-        <span class="sep" aria-hidden="true"></span><span>High Resolution</span>
-      </div>
-    </section>
-  </div>
-
-  <main class="wrap">
+  <main class="grid-wrap">
     <div class="grid" id="grid"></div>
-    <nav class="pager" id="pager" aria-label="Navigasi halaman"></nav>
   </main>
-
-  <footer class="site-footer">Copyright © <span id="year"></span> agb-777</footer>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Detail wallpaper" hidden>
     <div class="lb-stage">
@@ -248,31 +178,29 @@
 
   <script>
     "use strict";
-    const CONFIG = { dataFile: "./wallpapers.json", perPage: 12, swipeDistance: 50 };
+    const CONFIG = { dataFile: "./wallpapers.json", swipeDistance: 50 };
     const $ = (id) => document.getElementById(id);
-    const el = { grid: $("grid"), count: $("count"), metaCount: $("meta-count"), pager: $("pager"), year: $("year"), lightbox: $("lightbox"), image: $("image"), spinner: $("spinner"), position: $("position"), download: $("download"), close: $("close"), prev: $("prev"), next: $("next") };
-    const state = { wallpapers: [], page: 1, id: "" };
-    let shownPage = 0, shownId = "", lastFocus = null;
+    const el = { grid: $("grid"), lightbox: $("lightbox"), image: $("image"), spinner: $("spinner"), position: $("position"), download: $("download"), close: $("close"), prev: $("prev"), next: $("next") };
+    const state = { wallpapers: [], id: "" };
+    let shownId = "", lastFocus = null;
+
+    function buildHash(id) {
+      return id ? "#/?" + new URLSearchParams({ w: id }).toString() : "#/";
+    }
+
+    function goTo(id) {
+      state.id = id;
+      history.replaceState(null, "", buildHash(id));
+      render();
+    }
 
     function readHash() {
       const params = new URLSearchParams(location.hash.replace(/^#\/?\??/, ""));
-      state.page = Math.max(1, parseInt(params.get("page"), 10) || 1);
       state.id = params.get("w") || "";
     }
-    function buildHash({ page, id }) {
-      const params = new URLSearchParams();
-      if (page > 1) params.set("page", page);
-      if (id) params.set("w", id);
-      const query = params.toString();
-      return "#/" + (query ? "?" + query : "");
-    }
-    function goTo(patch) {
-      Object.assign(state, patch);
-      history.replaceState(null, "", buildHash(state));
-      render();
-    }
+
     const toId = (url) => String(url).replace(/^https?:\/\/[^/]+\//, "").replace(/\.[a-z0-9]+$/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    
+
     function normalize(list) {
       const seen = new Set();
       return list.filter((w) => w && (w.thumb || w.preview || w.original)).map((w, i) => {
@@ -294,28 +222,22 @@
       return normalize(list);
     }
 
-    const pageCount = () => Math.max(1, Math.ceil(state.wallpapers.length / CONFIG.perPage));
-
-    function showState(type, errorMsg = "") {
-      const isError = type === "error";
+    function showError(errorMsg) {
       el.grid.innerHTML = `
         <div class="state">
           <div class="state-icon">
-            ${isError 
-              ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>'
-              : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>'
-            }
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
           </div>
-          <h2>${isError ? "Gagal Memuat Data" : "Belum Ada Wallpaper"}</h2>
-          <p>${isError ? errorMsg : "Koleksi wallpaper akan segera ditambahkan di sini."}</p>
-          ${isError ? '<button class="state-btn" onclick="location.reload()">Muat Ulang Halaman</button>' : ''}
+          <h2>Gagal Memuat Data</h2>
+          <p>${errorMsg}</p>
+          <button class="state-btn" onclick="location.reload()">Muat Ulang</button>
         </div>`;
     }
 
     function createCard(wallpaper, number) {
       const link = document.createElement("a");
       link.className = "card";
-      link.href = buildHash({ page: state.page, id: wallpaper.id });
+      link.href = buildHash(wallpaper.id);
       link.setAttribute("aria-label", "Buka wallpaper " + number);
       const wrap = document.createElement("div");
       wrap.className = "card-img-wrap";
@@ -338,42 +260,12 @@
     }
 
     function renderGrid() {
-      const start = (state.page - 1) * CONFIG.perPage;
-      const items = state.wallpapers.slice(start, start + CONFIG.perPage);
-      el.count.innerHTML = `<span class="dot" aria-hidden="true"></span><strong>${state.wallpapers.length}</strong> Wallpaper`;
-      el.metaCount.textContent = state.wallpapers.length;
-      if (!items.length) { showState("empty"); return; }
-      el.grid.replaceChildren(...items.map((w, i) => createCard(w, start + i + 1)));
-    }
-
-    function pagerItem(text, page, { current = false, disabled = false, label = "" } = {}) {
-      const node = document.createElement(disabled ? "span" : "a");
-      node.className = "pager__item";
-      node.textContent = text;
-      if (label) node.setAttribute("aria-label", label);
-      if (disabled) node.setAttribute("aria-disabled", "true");
-      else node.href = buildHash({ page, id: "" });
-      if (current) node.setAttribute("aria-current", "page");
-      return node;
-    }
-
-    function renderPager() {
-      const total = pageCount();
-      if (total < 2) return el.pager.replaceChildren();
-      const numbers = [...new Set([1, total, state.page - 1, state.page, state.page + 1])].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
-      const nodes = [pagerItem("‹", state.page - 1, { disabled: state.page === 1, label: "Sebelumnya" })];
-      let last = 0;
-      for (const n of numbers) {
-        if (n - last > 1) { const gap = document.createElement("span"); gap.className = "pager__gap"; gap.textContent = "…"; nodes.push(gap); }
-        nodes.push(pagerItem(n, n, { current: n === state.page }));
-        last = n;
-      }
-      nodes.push(pagerItem("›", state.page + 1, { disabled: state.page === total, label: "Berikutnya" }));
-      el.pager.replaceChildren(...nodes);
+      if (!state.wallpapers.length) return;
+      el.grid.replaceChildren(...state.wallpapers.map((w, i) => createCard(w, i + 1)));
     }
 
     function setBackgroundInert(value) {
-      ["header", "main", "footer"].forEach(tag => { const el_tag = document.querySelector(tag); if (el_tag) el_tag.inert = value; });
+      document.querySelector("main").inert = value;
     }
 
     function showLightbox(index) {
@@ -411,31 +303,22 @@
       const { wallpapers, id } = state;
       if (wallpapers.length < 2) return;
       const index = wallpapers.findIndex((w) => w.id === id);
-      goTo({ id: wallpapers[(index + direction + wallpapers.length) % wallpapers.length].id });
+      goTo(wallpapers[(index + direction + wallpapers.length) % wallpapers.length].id);
     }
 
     function render() {
       const index = state.wallpapers.findIndex((w) => w.id === state.id);
-      if (index >= 0) state.page = Math.floor(index / CONFIG.perPage) + 1;
-      state.page = Math.min(state.page, pageCount());
-      if (state.page !== shownPage) {
-        const isFirstRender = shownPage === 0;
-        shownPage = state.page;
-        renderGrid();
-        renderPager();
-        if (!isFirstRender) window.scrollTo({ top: 0, behavior: "smooth" });
-      }
       if (index >= 0) showLightbox(index);
       else hideLightbox();
     }
 
-    el.close.addEventListener("click", () => goTo({ id: "" }));
+    el.close.addEventListener("click", () => goTo(""));
     el.prev.addEventListener("click", () => step(-1));
     el.next.addEventListener("click", () => step(1));
-    el.lightbox.addEventListener("click", (e) => { if (e.target === el.lightbox || e.target.closest(".lb-stage") === e.target) goTo({ id: "" }); });
+    el.lightbox.addEventListener("click", (e) => { if (e.target === el.lightbox || e.target.closest(".lb-stage") === e.target) goTo(""); });
     document.addEventListener("keydown", (e) => {
       if (el.lightbox.hidden) return;
-      if (e.key === "Escape") goTo({ id: "" });
+      if (e.key === "Escape") goTo("");
       else if (e.key === "ArrowLeft") step(-1);
       else if (e.key === "ArrowRight") step(1);
     });
@@ -451,22 +334,18 @@
     }, { passive: false });
 
     async function init() {
-      el.year.textContent = new Date().getFullYear();
       try {
         state.wallpapers = await loadData();
         readHash();
+        renderGrid();
         render();
         window.addEventListener("hashchange", () => { readHash(); render(); });
       } catch (err) {
         console.error("Load Error:", err);
-        el.count.innerHTML = `<span class="dot" style="background:#ff5f57;box-shadow:0 0 0 3px rgba(255,95,87,0.15)"></span><strong>0</strong> Wallpaper`;
         let msg = "Terjadi kesalahan saat memuat data.";
-        if (err.message.includes("404")) {
-          msg = "File <code>wallpapers.json</code> tidak ditemukan (Error 404). Pastikan: 1) Nama file huruf kecil semua, 2) File sudah di-commit dan di-push ke repository GitHub kamu.";
-        } else if (err.message.includes("Unexpected token")) {
-          msg = "Format <code>wallpapers.json</code> tidak valid (ada koma berlebih atau tanda kutip yang kurang).";
-        }
-        showState("error", msg);
+        if (err.message.includes("404")) msg = "File <code>wallpapers.json</code> tidak ditemukan. Pastikan nama file huruf kecil semua dan sudah di-push ke GitHub.";
+        else if (err.message.includes("Unexpected token")) msg = "Format <code>wallpapers.json</code> tidak valid.";
+        showError(msg);
       }
     }
     init();
